@@ -8,11 +8,11 @@ import {
   } from "react-icons/rx";
   
   import SpaceCity1 from "../assets/img1.jpg";
-  import SpaceCity5 from "../assets/img2.jpg";
+  import SpaceCity5 from "../assets/img2.jpeg";
   import SpaceCity6 from "../assets/img3.jpg";
   import SpaceCity7 from "../assets/img4.jpg";
   import SpaceCity8 from "../assets/img5.jpg";
-  import SpaceCity9 from "../assets/img6.jpg";
+  import SpaceCity9 from "../assets/img6.jpeg";
 
   export const ServiceData = [
     {

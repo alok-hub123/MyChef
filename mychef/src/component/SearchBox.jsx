@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
+import { CiSearch } from "react-icons/ci";
 
 function SearchBox() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -14,22 +15,27 @@ function SearchBox() {
   };
 
   return (
-    <div className='searchBox h-[80vh] w-full  flex flex-col justify-center items-center'>
-      <form onSubmit={handleSubmit} className="flex items-center justify-center max-w-md mx-auto mt-4">
-        <input
-          type="search"
-          value={searchTerm}
-          onChange={handleSearch}
-          placeholder="Search..."
-          className="w-full px-4 py-2 text-lg text-gray-700 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
-        />
-        <button type="submit"
-          className="px-4 py-2 ml-2 text-lg text-white bg-blue-600 hover:bg-blue-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
-        >
-          Search
-        </button>
-      </form>
-    </div>
+    <>
+      <div className=' h-[5vh] w-full bg-black mt-[1vh] '><h1 className='text-white text-3xl text-center w-full'>||  Search Your Desire  ||</h1></div>
+      <div className='searchBox h-[70vh] w-full relative'>
+        <form onSubmit={handleSubmit} className="w-[50vw] flex items-center justify-center max-w-md mx-auto relative">
+          <input
+            type="search"
+            value={searchTerm}
+            onChange={handleSearch}
+            placeholder="Search..."
+            className="w-full px-4 py-2 text-lg text-gray-700 bg-white  rounded-3xl focus:outline-none absolute top-[33vh]"
+          />
+          <CiSearch className='text-2xl absolute right-[1vw] top-[34vh] cursor-pointer'/>
+        </form>
+        <img src="/Images/carrotanim.png" alt="" className='h-[20vh] w-[5vw] absolute left-[34.5vw] top-[21vh]'/>
+        <img src="/Images/tomatotree.png" alt="" className='h-[45vh] w-[10vw] absolute left-0 bottom-0'/>
+        <img src="/Images/r_spoon.png" alt="" className='h-[23vh] w-[15vw] absolute right-0'/>
+        <img src="/Images/tadka.png" alt="" className='h-[19vh] w-[13vw] absolute right-0 bottom-0'/>
+      </div>
+      <div className=' h-[1vh] w-full bg-black '></div>
+
+    </>
   );
 }
 

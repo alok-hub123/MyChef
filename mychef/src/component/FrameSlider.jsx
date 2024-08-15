@@ -6,16 +6,16 @@ import 'swiper/css/pagination';
 import { RxArrowTopRight } from 'react-icons/rx';
 
 import { EffectCoverflow, Pagination, Autoplay} from 'swiper/modules';
-import { ServiceData } from '../constants';
+import { ServiceData } from '../constants/index';
 
 export default function FrameSlider() {
     return (
         <> 
-        <div className='h-[100vh]'> 
-            <div className="text-white">
+        <div className='h-[100vh] bg-no-repeat bg-bottom bg-cover' style={{backgroundImage:`url("/Images/flame.png")`}}> 
+            <div className="text-white ml-[5vw] pt-[10vh]">
                 <h1 className="text-3xl font-bold mr-5">See What Others Having</h1>
             </div>
-            <div className="flex items-center justify-center h-[80%]">
+            <div className="flex items-center justify-center h-[80%]" >
                 <Swiper
                     effect={'coverflow'}
                     grabCursor={true}
@@ -53,7 +53,6 @@ export default function FrameSlider() {
                     ))}
                 </Swiper>
             </div>
-            <div className='bg-transparent h-[5vh] text-white'><h1>it</h1></div>
         </div>
         </>
     );

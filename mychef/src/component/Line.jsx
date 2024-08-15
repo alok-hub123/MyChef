@@ -10,7 +10,7 @@ const Line = () => {
     const finalPath = "M 10 100 Q 500 100 1900 100";
 
     const handleMouseMove = (event) => {
-      const path = `M 10 100 Q ${event.clientX-100} ${event.clientY-200} 1900 100`;
+      const path = `M 10 100 Q ${event.clientX - 100} ${event.clientY - 200} 1900 100`;
       gsap.to(svgPathElement, {
         attr: { d: path },
         duration: 0.3,
@@ -36,15 +36,17 @@ const Line = () => {
   }, []);
 
   return (
-    <svg width="100%" height="250" >
-      <path
-        ref={svgPathRef}
-        d="M 10 100 Q 500 100 1900 100"
-        stroke="white"
-        strokeWidth="3"
-        fill="transparent"
-      />
-    </svg>
+    <div style={{backgroundImage:`url("/Images/lineBg.png")`}}>
+      <svg width="100%" height="200" >
+        <path
+          ref={svgPathRef}
+          d="M 10 100 Q 500 100 1900 100"
+          stroke="white"
+          strokeWidth="3"
+          fill="transparent"
+        />
+      </svg>
+    </div>
   );
 };
 

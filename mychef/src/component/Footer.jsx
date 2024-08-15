@@ -3,7 +3,7 @@ import { FaFacebook, FaInstagram, FaTwitter, FaLinkedin, FaYoutube } from 'react
 
 const Footer = () => {
   return (
-    <footer className="bg-gray-800 text-white py-6">
+    <footer className="bg-gray-800 text-white py-6 relative" >
       <div className="container mx-auto px-4">
         <div className="flex flex-col md:flex-row justify-between">
           <div className="mb-4 md:mb-0">
@@ -48,6 +48,8 @@ const Footer = () => {
           <p className="text-sm">&copy; 2024 Recipe Finder and Generator. All rights reserved.</p>
         </div>
       </div>
+      <img src="/Images/ginger.png" alt="" className='h-[11vh] w-[8vw] absolute left-0 top-0' />
+      <img src="/Images/potato.png" alt="" className='h-[11vh] w-[10vw] absolute right-0 bottom-0' />
     </footer>
   );
 };
