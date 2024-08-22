@@ -1,28 +1,48 @@
 import './App.css'
-import Navbar from './component/Navbar'
-import LandingPage from './component/LandingPage'
-import Slider from './component/Slider'
-import FrameSlider from './component/FrameSlider'
-import Line from './component/Line'
-import SearchBox from './component/SearchBox'
-import Footer from './component/Footer'
-import Intro from './component/Intro'
+import { createBrowserRouter, RouterProvider} from "react-router-dom";
+import AppLayout from './pages/AppLayout';
+import Home from './pages/Home'
+import AboutUs from './pages/AboutUs'
+import ContactUs from './pages/ContactUs'
+import Dashboard from './pages/Dashboard'
+import Recipe from './pages/Recipe'
+import RecipeGenerator from './pages/RecipeGenerator';
 
 
 function App() {
-  return (
-    <>
-      <Navbar />
-      <LandingPage />
-      <Intro />
-      <Slider />
-      <FrameSlider />
-      <SearchBox />
-      <Line />
-      <Footer />
-      
-    </>
-  )
+   const router = createBrowserRouter([
+      {
+        path: '/',
+        element: <AppLayout />,
+        children: [
+          {
+            path: '/',
+            element: <Home />,
+          },
+          {
+            path: '/about',
+            element: <AboutUs />
+          },
+          {
+            path: '/contact',
+            element: <ContactUs />
+          },
+          {
+            path: '/recipe',
+            element: <Recipe />
+          },
+          {
+            path: '/generator',
+            element: <RecipeGenerator />
+          },
+          {
+            path: '/dashboard',
+            element: <Dashboard />
+          }
+        ]
+      }
+   ])
+   return <RouterProvider router={router} />
 }
 
 export default App
