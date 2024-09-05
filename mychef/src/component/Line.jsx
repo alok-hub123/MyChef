@@ -37,7 +37,7 @@ const Line = () => {
 
   return (
     <div style={{backgroundImage:`url("/Images/lineBg.png")`}}>
-      <svg width="100%" height="200" >
+      <svg width="99%" height="200" >
         <path
           ref={svgPathRef}
           d="M 10 100 Q 500 100 1900 100"

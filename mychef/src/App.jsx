@@ -1,12 +1,15 @@
-import './App.css'
+// import './style.css'
 import { createBrowserRouter, RouterProvider} from "react-router-dom";
 import AppLayout from './pages/AppLayout';
 import Home from './pages/Home'
-import AboutUs from './pages/AboutUs'
-import ContactUs from './pages/ContactUs'
 import Dashboard from './pages/Dashboard'
 import Recipe from './pages/Recipe'
 import RecipeGenerator from './pages/RecipeGenerator';
+import Login from './pages/Login';
+import Shop from './pages/Shop';
+import Tutorial from './pages/Tutorial';
+import Favourite from './pages/Favourite';
+import Profile from './pages/Profile';
 
 
 function App() {
@@ -20,14 +23,6 @@ function App() {
             element: <Home />,
           },
           {
-            path: '/about',
-            element: <AboutUs />
-          },
-          {
-            path: '/contact',
-            element: <ContactUs />
-          },
-          {
             path: '/recipe',
             element: <Recipe />
           },
@@ -36,10 +31,49 @@ function App() {
             element: <RecipeGenerator />
           },
           {
+            path: '/shop',
+            element: <Shop />
+          },
+          {
+            path: '/login',
+            element: <Login />
+          },
+        ]
+      },
+      {
+        path: '/dashboard',
+        element: <Dashboard />,
+        children: [
+          {
             path: '/dashboard',
-            element: <Dashboard />
+            element: <Home />,
+          },
+          {
+            path: '/dashboard/recipe',
+            element: <Recipe />
+          },
+          {
+            path: '/dashboard/generator',
+            element: <RecipeGenerator />
+          },
+          {
+            path: '/dashboard/tutorial',
+            element: <Tutorial />
+          },
+          {
+            path: '/dashboard/favourite',
+            element: <Favourite />
+          },
+          {
+            path: '/dashboard/profile',
+            element: <Profile />
+          },
+          {
+            path: '/dashboard/shop',
+            element: <Shop />
           }
         ]
+       
       }
    ])
    return <RouterProvider router={router} />

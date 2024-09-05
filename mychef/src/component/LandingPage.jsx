@@ -5,6 +5,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
+
 function LandingPage() {
 
   useGSAP(() => {
@@ -64,9 +65,23 @@ function LandingPage() {
     })
   }, []);
 
+  useGSAP(() => {
+    gsap.from(".leaf", {
+      x: 400,
+      duration: 2,
+      ease: 'power2.inOut',
+      scrollTrigger: {
+        trigger: ".leaf",
+        start: "top 80%",
+        end: "bottom 60%",
+        scrub: true,
+      }
+    })
+  }, []);
+
 
   return (
-    <div className='overflow-hidden'>
+    <div className='overflow-hidden bg-no-repeat bg-contain'>
 
       <div className='relative'>
         <div className='h-[90vh] absolute top-[-11.4vh] left-[-5vw] l_animate'>
@@ -108,7 +123,7 @@ function LandingPage() {
           where every recipe is a tribute to the love and passion Indians have for their food.
           From timeless classics to modern twists, explore the flavors that define our culture and heritage.
         </p>
-        <img src="/Images/leaf.png" alt="" className='w-[25%] h-full' />
+        <img src="/Images/leaf.png" alt="" className='w-[25%] h-full  leaf' />
       </div>
     </div>
   );

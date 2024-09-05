@@ -1,9 +1,10 @@
 import React from 'react';
 import { FaFacebook, FaInstagram, FaTwitter, FaLinkedin, FaYoutube } from 'react-icons/fa';
 
+
 const Footer = () => {
   return (
-    <footer className="bg-gray-800 text-white py-6 relative" >
+    <footer className="footer bg-gray-700 text-white py-6 relative" >
       <div className="container mx-auto px-4">
         <div className="flex flex-col md:flex-row justify-between">
           <div className="mb-4 md:mb-0">
@@ -29,26 +30,26 @@ const Footer = () => {
         </div>
         <div className="mt-6 border-t border-gray-700 pt-4 text-center">
           <div className="flex justify-center space-x-4 mb-4">
-            <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white">
+            <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-blue-600">
               <FaFacebook size={24} />
             </a>
-            <a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white">
+            <a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-pink-500">
               <FaInstagram size={24} />
             </a>
-            <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white">
+            <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-cyan-400">
               <FaTwitter size={24} />
             </a>
-            <a href="https://www.linkedin.com" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white">
+            <a href="https://www.linkedin.com" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-sky-600">
               <FaLinkedin size={24} />
             </a>
-            <a href="https://www.youtube.com" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white">
+            <a href="https://www.youtube.com" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-red-500">
               <FaYoutube size={24} />
             </a>
           </div>
           <p className="text-sm">&copy; 2024 Recipe Finder and Generator. All rights reserved.</p>
         </div>
       </div>
-      <img src="/Images/ginger.png" alt="" className='h-[11vh] w-[8vw] absolute left-0 top-0' />
+      <img src="/Images/ginger.png" alt="" className=' h-[11vh] w-[8vw] absolute left-0 top-[2vh]' />
       <img src="/Images/potato.png" alt="" className='h-[11vh] w-[10vw] absolute right-0 bottom-0' />
     </footer>
   );
