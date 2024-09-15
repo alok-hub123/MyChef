@@ -10,6 +10,8 @@ import Shop from './pages/Shop';
 import Tutorial from './pages/Tutorial';
 import Favourite from './pages/Favourite';
 import Profile from './pages/Profile';
+import RecipeDetail from "./pages/RecipeDetail";
+import selectedRecipe from "./pages/Recipe.jsx"
 
 
 function App() {
@@ -71,7 +73,7 @@ function App() {
           {
             path: '/dashboard/shop',
             element: <Shop />
-          }
+          },
         ]
        
       }

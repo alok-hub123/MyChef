@@ -2,7 +2,6 @@ import React from 'react'
 import { useState } from 'react';
 import { FaHome, FaUtensils, FaListAlt, FaVideo, FaHeart, FaUser, FaShoppingCart } from 'react-icons/fa';
 import { Link, Outlet } from 'react-router-dom';
-import Home from './Home';
 import { CgProfile } from "react-icons/cg";
 
 export default function Dashboard() {
@@ -25,23 +24,23 @@ export default function Dashboard() {
 
   return (
     <div>
-      <nav className="sticky top-1 z-[1000] w-full px-20 mb-[2vh] font-['Neue Montreal'] flex justify-between items-center text-white" >
+      <nav className="sticky top-0 z-10 w-full px-3 py-2 font-['Neue Montreal'] flex justify-between items-center text-white backdrop-blur" >
         <div className='bg-cover'>
-          <img src="./Images/logo.png" alt="logo" className='logo w-30 h-16 ' />
+          <img src="./Images/logo.png" alt="logo" className='logo w-30 h-10 ' />
         </div>
-        <div className="text-2xl">
+        <div className="text-3xl">
           <CgProfile />
         </div>
       </nav>
       <Outlet />   
       <div className="flex flex-col items-center justify-center">
-        <div className="fixed bottom-10 flex space-x-6 bg-white rounded-xl">
+        <div className="fixed bottom-[3vh] flex space-x-6 bg-white rounded-xl">
           {icons.map((item) => (
             <div key={item.id} className="flex flex-col items-center">
               <Link to={item.path}>
                 <div
                   onClick={() => handleIconClick(item.id)}
-                  className={`p-4 cursor-pointer text-2xl transition duration-300 ${selected === item.id ? 'text-orange-500' : 'text-gray-500'}`}
+                  className={`py-2 px-3 z-10 cursor-pointer text-2xl transition duration-300 ${selected === item.id ? 'text-orange-500' : 'text-gray-500'}`}
                 >
                   {item.icon}
                 </div>
