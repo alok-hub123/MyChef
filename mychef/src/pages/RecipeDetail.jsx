@@ -1,15 +1,16 @@
 import React from 'react'
+import { useParams } from 'react-router-dom'
 
-const RecipeDetail = ({item}) => {
-    return (
-        <div>
-          <h2>{item.RecipeName}</h2>
-          <p>{item.Description}</p>
-            <div>{item.Ingredients}</div>
-          <p>Cooking Time: {item.TotalTimeInMins} minutes</p>
-          {/* ... */}
-        </div>
-    )
+const RecipeDetail = () => {
+
+  const {recipeId} = useParams();
+
+  return (
+    <div>
+      <h1>This is the detail of recipe {recipeId}</h1>
+    </div>
+  )
+
 }
 
 export default RecipeDetail

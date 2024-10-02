@@ -73,10 +73,13 @@ function App() {
           {
             path: '/dashboard/shop',
             element: <Shop />
-          },
+          }, 
         ]
-       
-      }
+      },
+      {
+        path: '/:recipeId',
+        element: <RecipeDetail />
+      },
    ])
    return <RouterProvider router={router} />
 }

@@ -1,26 +1,23 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useState } from 'react'
 import { BsChevronDown } from "react-icons/bs";
 import { LuAlarmClock } from "react-icons/lu";
 import { GiKitchenScale } from 'react-icons/gi';
 import { GiNoodles } from 'react-icons/gi';
 import { FaCarrot } from 'react-icons/fa';
-import { FaHeartbeat } from 'react-icons/fa';
 import { GiMeal } from 'react-icons/gi';
-import { FaConciergeBell } from 'react-icons/fa';
 import { FaGlobe } from 'react-icons/fa';
-import IndianFoodDataset from '../constants/IndianFoodDatasetJSON.json';
-import {ID, API_KEY} from '../credentials.jsx';
-import RecipeDetail from './RecipeDetail.jsx';
-import {Link} from 'react-router-dom'
+import IndianFoodDataset from '../constants/IndianFoodDataset.json';
+import { useNavigate } from 'react-router-dom';
 
 // const fetchData = async () => {
-//   const query = 'chicken';
+//   const query = 'indian';
 //   const url = `https://api.edamam.com/search?q=${query}&app_id=${ID}&app_key=${API_KEY}&from=0&to=20`;
 //   const response = await fetch(url);  // Make the API request
 //   const data = await response.json();
 //   const recipe = data.hits;
 //   console.log(recipe);
 // };
+
 
 
 const fetchTwentyItems = (array) => {
@@ -33,10 +30,10 @@ export default function Recipe() {
 
   const [isCookingOpen, setIsCookingOpen] = useState(false);
   const [isIngredientOpen, setIsIngredientOpen] = useState(false);
-  const [isCaloriesOpen, setIsCaloriesOpen] = useState(false);
+  const [isServingOpen, setIsServingOpen] = useState(false);
   const [isDietOpen, setIsDietOpen] = useState(false);
   const [isHealthOpen, setIsHealthOpen] = useState(false);
-  const [isMealOpen, setIsMealOpen] = useState(false);
+  const [isCourseOpen, setIsCourseOpen] = useState(false);
   const [isDishOpen, setIsDishOpen] = useState(false);
   const [isCusineOpen, setIsCusineOpen] = useState(false);
 
@@ -54,8 +51,8 @@ export default function Recipe() {
     setIsIngredientOpen(!isIngredientOpen);
   };
 
-  const caloriesDropdown = () => {
-    setIsCaloriesOpen(!isCaloriesOpen);
+  const servingDropdown = () => {
+    setIsServingOpen(!isServingOpen);
   };
 
   const dietDropdown = () => {
@@ -66,8 +63,8 @@ export default function Recipe() {
     setIsHealthOpen(!isHealthOpen);
   };
 
-  const mealDropdown = () => {
-    setIsMealOpen(!isMealOpen);
+  const courseDropdown = () => {
+    setIsCourseOpen(!isCourseOpen);
   };
 
   const dishDropdown = () => {
@@ -78,12 +75,7 @@ export default function Recipe() {
     setIsCusineOpen(!isCusineOpen);
   };
 
-   //showing recipe detail
-   const [selectedRecipe, setSelectedRecipe] = useState(null);
-
-   const handleRecipeClick = (item) => {
-     setSelectedRecipe(item);
-   };
+  const navigate = useNavigate();
 
   return (
     <div className='w-full bg-zinc-600 text-white flex '>
@@ -101,14 +93,6 @@ export default function Recipe() {
           </button>
           <div className={`transition-all duration-300 mt-3 ${isCookingOpen ? 'block' : 'hidden'}`}>
             <div className='flex flex-wrap gap-3 ml-[3vw]' data-filter='cook-time'>
-              <label className='bg-zinc-500 rounded-md flex items-center cursor-pointer has-[:checked]:bg-orange-400'>
-                <div className='px-2'>&lt; 5 minutes</div>
-                <input type="radio" name="cook-time" value="5" aria-label="5 or less minutes" className='peer appearance-none h-[1px] w-[1px] m-[-1px]' />
-              </label>
-              <label className='bg-zinc-500 rounded-md flex items-center cursor-pointer has-[:checked]:bg-orange-400'>
-                <div className='px-2'>5 - 10 minutes</div>
-                <input type="radio" name="cook-time" value="5-10" aria-label="5 to 10 minutes" className='appearance-none h-[1px] w-[1px] m-[-1px]' />
-              </label>
               <label className='bg-zinc-500 rounded-md flex items-center cursor-pointer has-[:checked]:bg-orange-400'>
                 <div className='px-2'>10 - 20 minutes</div>
                 <input type="radio" name="cook-time" value="10-20" aria-label="10 to 20 minutes" className='appearance-none h-[1px] w-[1px] m-[-1px]' />
@@ -130,7 +114,7 @@ export default function Recipe() {
                 <input type="radio" name="cook-time" value="50-60" aria-label="50 to 60 minutes" className='appearance-none h-[1px] w-[1px] m-[-1px]' />
               </label>
               <label className='bg-zinc-500 rounded-md flex items-center cursor-pointer has-[:checked]:bg-orange-400'>
-                <div className='px-2'>&lt; 1 hour</div>
+                <div className='px-2'>&gt; 1 hour</div>
                 <input type="radio" name="cook-time" value="60+" aria-label="1 or more hours" className='appearance-none h-[1px] w-[1px] m-[-1px]' />
               </label>
             </div>
@@ -164,7 +148,7 @@ export default function Recipe() {
                 <input type="radio" name="ingr" value="20-30" aria-label="20 to 30 Ingredients" className='appearance-none h-[1px] w-[1px] m-[-1px]' />
               </label>
               <label className='bg-zinc-500 rounded-md flex items-center cursor-pointer has-[:checked]:bg-orange-400'>
-                <div className='px-2'>&lt; 30 Ingredients</div>
+                <div className='px-2'>&gt; 30 Ingredients</div>
                 <input type="radio" name="ingr" value="30+" aria-label="30 or more Ingredients" className='appearance-none h-[1px] w-[1px] m-[-1px]' />
               </label>
             </div>
@@ -172,42 +156,42 @@ export default function Recipe() {
         </div>
 
         <div className='mx-[1vw] my-[2vw]'>
-          <button className='flex gap-[5vw] w-full' onClick={caloriesDropdown}>
+          <button className='flex gap-[5vw] w-full' onClick={servingDropdown}>
             <div className='flex gap-[1vw] w-[10vw]'>
               <GiNoodles className='text-2xl' />
-              <span>Calories</span>
+              <span>Serving</span>
             </div>
-            <BsChevronDown className={`transform transition-transform duration-300 ${isCaloriesOpen ? 'rotate-180' : ''}`} />
+            <BsChevronDown className={`transform transition-transform duration-300 ${isServingOpen ? 'rotate-180' : ''}`} />
           </button>
-          <div className={`transition-all duration-300 mt-3 ${isCaloriesOpen ? 'block' : 'hidden'}`}>
+          <div className={`transition-all duration-300 mt-3 ${isServingOpen ? 'block' : 'hidden'}`}>
             <div className='flex flex-wrap gap-3 ml-[3vw]' data-filter="calories">
               <label className='bg-zinc-500 rounded-md flex items-center cursor-pointer has-[:checked]:bg-orange-400'>
-                <div className='px-2'>&lt; 50 Calories</div>
-                <input type="radio" name="calories" value="50" aria-label="50 or less Calories" className='appearance-none h-[1px] w-[1px] m-[-1px]' />
+                <div className='px-2'> Serving 1 </div>
+                <input type="radio" name="serving" value="1" aria-label="serving 1" className='appearance-none h-[1px] w-[1px] m-[-1px]' />
               </label>
               <label className='bg-zinc-500 rounded-md flex items-center cursor-pointer has-[:checked]:bg-orange-400'>
-                <div className='px-2'>50 - 100 Calories</div>
-                <input type="radio" name="calories" value="50-100" aria-label="50 to 100 Calories" className='appearance-none h-[1px] w-[1px] m-[-1px]' />
+                <div className='px-2'> Serving 2 </div>
+                <input type="radio" name="serving" value="2" aria-label="serving 2" className='appearance-none h-[1px] w-[1px] m-[-1px]' />
               </label>
               <label className='bg-zinc-500 rounded-md flex items-center cursor-pointer has-[:checked]:bg-orange-400'>
-                <div className='px-2'>100 - 200 Calories</div>
-                <input type="radio" name="calories" value="100-200" aria-label="100 to 200 Calories" className='appearance-none h-[1px] w-[1px] m-[-1px]' />
+                <div className='px-2'> Serving 3 </div>
+                <input type="radio" name="serving" value="3" aria-label="serving 3" className='appearance-none h-[1px] w-[1px] m-[-1px]' />
               </label>
               <label className='bg-zinc-500 rounded-md flex items-center cursor-pointer has-[:checked]:bg-orange-400'>
-                <div className='px-2'>200 - 300 Calories</div>
-                <input type="radio" name="calories" value="200-300" aria-label="200 to 300 Calories" className='appearance-none h-[1px] w-[1px] m-[-1px]' />
+                <div className='px-2'> Serving 4 </div>
+                <input type="radio" name="serving" value="4" aria-label="serving 4" className='appearance-none h-[1px] w-[1px] m-[-1px]' />
               </label>
               <label className='bg-zinc-500 rounded-md flex items-center cursor-pointer has-[:checked]:bg-orange-400'>
-                <div className='px-2'>300 - 400 Calories</div>
-                <input type="radio" name="calories" value="300-400" aria-label="300 to 400 Calories" className='appearance-none h-[1px] w-[1px] m-[-1px]' />
+                <div className='px-2'> Serving 5 </div>
+                <input type="radio" name="serving" value="5" aria-label="serving 5" className='appearance-none h-[1px] w-[1px] m-[-1px]' />
               </label>
               <label className='bg-zinc-500 rounded-md flex items-center cursor-pointer has-[:checked]:bg-orange-400'>
-                <div className='px-2'>400 - 500 Calories</div>
-                <input type="radio" name="calories" value="400-500" aria-label="400 to 500 Calories" className='appearance-none h-[1px] w-[1px] m-[-1px]' />
+                <div className='px-2'> Serving 6 </div>
+                <input type="radio" name="serving" value="6" aria-label="serving 6" className='appearance-none h-[1px] w-[1px] m-[-1px]' />
               </label>
               <label className='bg-zinc-500 rounded-md flex items-center cursor-pointer has-[:checked]:bg-orange-400'>
-                <div className='px-2'>&lt; 500 Calories</div>
-                <input type="radio" name="calories" value="500+" aria-label="500 or more Calories" className='appearance-none h-[1px] w-[1px] m-[-1px]' />
+                <div className='px-2'> Serving &gt;6 </div>
+                <input type="radio" name="serving" value="6+" aria-label="serving 6 or more" className='appearance-none h-[1px] w-[1px] m-[-1px]' />
               </label>
             </div>
           </div>
@@ -224,141 +208,59 @@ export default function Recipe() {
           <div className={`transition-all duration-300 mt-3 ${isDietOpen ? 'block' : 'hidden'}`}>
             <div className='flex flex-wrap gap-3 ml-[3vw]' data-filter="diet">
               <label className='bg-zinc-500 rounded-md flex items-center cursor-pointer has-[:checked]:bg-orange-400' >
-                <div className='px-2'>Balanced</div>
-                <input type="checkbox" name="Balanced" value="balanced" aria-label='Balanced' className='appearance-none h-[1px] w-[1px] m-[-1px]' />
+                <div className='px-2'>Diabetic Friendly</div>
+                <input type="checkbox" name="Diabetic Friendly" value="diabetic-friendly" aria-label='Diabetic Friendly' className='appearance-none h-[1px] w-[1px] m-[-1px]' />
               </label>
-              <label className='bg-zinc-500 rounded-md flex items-center cursor-pointer has-[:checked]:bg-orange-400'>
-                <div className='px-2'>High Fiber</div>
-                <input type="checkbox" name="High Fiber" value="high-fiber" aria-label='High Fiber' className='appearance-none h-[1px] w-[1px] m-[-1px]' />
-              </label>
-              <label className='bg-zinc-500 rounded-md flex items-center cursor-pointer has-[:checked]:bg-orange-400'>
-                <div className='px-2'>High Protein</div>
-                <input type="checkbox" name="High Protein" value="high-protein" aria-label='High Protein' className='appearance-none h-[1px] w-[1px] m-[-1px]' />
-              </label>
-              <label className='bg-zinc-500 rounded-md flex items-center cursor-pointer has-[:checked]:bg-orange-400'>
-                <div className='px-2'>Low Carb</div>
-                <input type="checkbox" name="Low Carb" value="low-carb" aria-label='Low Carb' className='appearance-none h-[1px] w-[1px] m-[-1px]' />
-              </label>
-              <label className='bg-zinc-500 rounded-md flex items-center cursor-pointer has-[:checked]:bg-orange-400'>
-                <div className='px-2'>Low Fat</div>
-                <input type="checkbox" name="Low Fat" value="low-fat" aria-label='Low Fat' className='appearance-none h-[1px] w-[1px] m-[-1px]' />
-              </label>
-              <label className='bg-zinc-500 rounded-md flex items-center cursor-pointer has-[:checked]:bg-orange-400'>
-                <div className='px-2'>Low Sodium</div>
-                <input type="checkbox" name="Low Sodium" value="low-sodium" aria-label='Low Sodium' className='appearance-none h-[1px] w-[1px] m-[-1px]' />
-              </label>
-            </div>
-          </div>
-        </div>
-
-        <div className='mx-[1vw] my-[2vw]'>
-          <button className='flex gap-[5vw] w-full' onClick={healthDropdown}>
-            <div className='flex gap-[1vw] w-[10vw]'>
-              <FaHeartbeat className='text-2xl' />
-              <span>Health</span>
-            </div>
-            <BsChevronDown className={`transform transition-transform duration-300 ${isHealthOpen ? 'rotate-180' : ''}`} />
-          </button>
-          <div className={`transition-all duration-300 mt-3 ${isHealthOpen ? 'block' : 'hidden'}`}>
-            <div className='flex flex-wrap gap-3 ml-[3vw]' data-filter="health">
-              <label className='bg-zinc-500 rounded-md flex items-center cursor-pointer has-[:checked]:bg-orange-400'>
-                <div className='px-2'>Alcohol Cocktail</div>
-                <input type="checkbox" name="Alcohol Cocktail" value="alcohol-cocktail" aria-label='Alcohol Cocktail' className='appearance-none h-[1px] w-[1px] m-[-1px]' />
-              </label>
-              <label className='bg-zinc-500 rounded-md flex items-center cursor-pointer has-[:checked]:bg-orange-400'>
-                <div className='px-2'>Alcohol Free</div>
-                <input type="checkbox" name="Alcohol Free" value="alcohol-free" aria-label='Alcohol Free' className='appearance-none h-[1px] w-[1px] m-[-1px]' />
-              </label>
-              <label className='bg-zinc-500 rounded-md flex items-center cursor-pointer has-[:checked]:bg-orange-400'>
-                <div className='px-2'>Dairy Free</div>
-                <input type="checkbox" name="Dairy Free" value="dairy-free" aria-label='Dairy Free' className='appearance-none h-[1px] w-[1px] m-[-1px]' />
-              </label>
-              <label className='bg-zinc-500 rounded-md flex items-center cursor-pointer has-[:checked]:bg-orange-400'>
-                <div className='px-2'>Egg Free</div>
-                <input type="checkbox" name="Egg Free" value="egg-free" aria-label='Egg Free' className='appearance-none h-[1px] w-[1px] m-[-1px]' />
-              </label>
-              <label className='bg-zinc-500 rounded-md flex items-center cursor-pointer has-[:checked]:bg-orange-400'>
-                <div className='px-2'>Fish Free</div>
-                <input type="checkbox" name="Fish Free" value="fish-free" aria-label='Fish Free' className='appearance-none h-[1px] w-[1px] m-[-1px]' />
-              </label>
-              <label className='bg-zinc-500 rounded-md flex items-center cursor-pointer has-[:checked]:bg-orange-400'>
-                <div className='px-2'>Gluten Free</div>
-                <input type="checkbox" name="Gluten Free" value="gluten-free" aria-label='Gluten Free' className='appearance-none h-[1px] w-[1px] m-[-1px]' />
-              </label>
-              <label className='bg-zinc-500 rounded-md flex items-center cursor-pointer has-[:checked]:bg-orange-400'>
-                <div className='px-2'>Immuno Supportive</div>
-                <input type="checkbox" name="Immuno Supportive" value="immuno-supportive" aria-label='Immuno Supportive' className='appearance-none h-[1px] w-[1px] m-[-1px]' />
-              </label>
-              <label className='bg-zinc-500 rounded-md flex items-center cursor-pointer has-[:checked]:bg-orange-400'>
-                <div className='px-2'>Keto</div>
-                <input type="checkbox" name="Keto" value="keto" aria-label='Keto' className='appearance-none h-[1px] w-[1px] m-[-1px]' />
-              </label>
-              <label className='bg-zinc-500 rounded-md flex items-center cursor-pointer has-[:checked]:bg-orange-400'>
-                <div className='px-2'>Kidney Friendly</div>
-                <input type="checkbox" name="Kidney Friendly" value="kidney-friendly" aria-label='Kidney Friendly' className='appearance-none h-[1px] w-[1px] m-[-1px]' />
-              </label>
-              <label className='bg-zinc-500 rounded-md flex items-center cursor-pointer has-[:checked]:bg-orange-400'>
-                <div className='px-2'>Low Potassium</div>
-                <input type="checkbox" name="Low Potassium" value="low-potassium" aria-label='Low Potassium' className='appearance-none h-[1px] w-[1px] m-[-1px]' />
-              </label>
-              <label className='bg-zinc-500 rounded-md flex items-center cursor-pointer has-[:checked]:bg-orange-400'>
-                <div className='px-2'>Low Sugar</div>
-                <input type="checkbox" name="Low Sugar" value="low-sugar" aria-label='Low Sugar' className='appearance-none h-[1px] w-[1px] m-[-1px]' />
-              </label>
-              <label className='bg-zinc-500 rounded-md flex items-center cursor-pointer has-[:checked]:bg-orange-400'>
-                <div className='px-2'>Mustard Free</div>
-                <input type="checkbox" name="Mustard Free" value="mustard-free" aria-label='Mustard Free' className='appearance-none h-[1px] w-[1px] m-[-1px]' />
-              </label>
-              <label className='bg-zinc-500 rounded-md flex items-center cursor-pointer has-[:checked]:bg-orange-400'>
-                <div className='px-2'>No Oil Added</div>
-                <input type="checkbox" name="No Oil Added" value="no-oil-added" aria-label='No Oil Added' className='appearance-none h-[1px] w-[1px] m-[-1px]' />
-              </label>
-              <label className='bg-zinc-500 rounded-md flex items-center cursor-pointer has-[:checked]:bg-orange-400'>
-                <div className='px-2'>Peanut Free</div>
-                <input type="checkbox" name="Peanut Free" value="peanut-free" aria-label='Peanut Free' className='appearance-none h-[1px] w-[1px] m-[-1px]' />
-              </label>
-              <label className='bg-zinc-500 rounded-md flex items-center cursor-pointer has-[:checked]:bg-orange-400'>
-                <div className='px-2'>Red Meat Free</div>
-                <input type="checkbox" name="Red Meat Free" value="red-meat-free" aria-label='Red Meat Free' className='appearance-none h-[1px] w-[1px] m-[-1px]' />
-              </label>
-              <label className='bg-zinc-500 rounded-md flex items-center cursor-pointer has-[:checked]:bg-orange-400'>
-                <div className='px-2'>Sesame Free</div>
-                <input type="checkbox" name="Sesame Free" value="sesame-free" aria-label='Sesame Free' className='appearance-none h-[1px] w-[1px] m-[-1px]' />
-              </label>
-              <label className='bg-zinc-500 rounded-md flex items-center cursor-pointer has-[:checked]:bg-orange-400'>
-                <div className='px-2'>Sugar Conscious</div>
-                <input type="checkbox" name="Sugar Conscious" value="sugar-conscious" aria-label='Sugar Conscious' className='appearance-none h-[1px] w-[1px] m-[-1px]' />
-              </label>
-              <label className='bg-zinc-500 rounded-md flex items-center cursor-pointer has-[:checked]:bg-orange-400'>
-                <div className='px-2'>Sulfite Free</div>
-                <input type="checkbox" name="Sulfite Free" value="sulfite-free" aria-label='Sulfite Free' className='appearance-none h-[1px] w-[1px] m-[-1px]' />
-              </label>
-              <label className='bg-zinc-500 rounded-md flex items-center cursor-pointer has-[:checked]:bg-orange-400'>
-                <div className='px-2'>Vegan</div>
-                <input type="checkbox" name="Vegan" value="vegan" aria-label='Vegan' className='appearance-none h-[1px] w-[1px] m-[-1px]' />
-              </label>
-              <label className='bg-zinc-500 rounded-md flex items-center cursor-pointer has-[:checked]:bg-orange-400'>
+              <label className='bg-zinc-500 rounded-md flex items-center cursor-pointer has-[:checked]:bg-orange-400' >
                 <div className='px-2'>Vegetarian</div>
                 <input type="checkbox" name="Vegetarian" value="vegetarian" aria-label='Vegetarian' className='appearance-none h-[1px] w-[1px] m-[-1px]' />
               </label>
-              <label className='bg-zinc-500 rounded-md flex items-center cursor-pointer has-[:checked]:bg-orange-400'>
-                <div className='px-2'>Wheat Free</div>
-                <input type="checkbox" name="Wheat Free" value="wheat-free" aria-label='Wheat Free' className='appearance-none h-[1px] w-[1px] m-[-1px]' />
+              <label className='bg-zinc-500 rounded-md flex items-center cursor-pointer has-[:checked]:bg-orange-400' >
+                <div className='px-2'>Non Vegeterian</div>
+                <input type="checkbox" name="Non Vegeterian" value="non-vegeterian" aria-label='Non Vegeterian' className='appearance-none h-[1px] w-[1px] m-[-1px]' />
+              </label>
+              <label className='bg-zinc-500 rounded-md flex items-center cursor-pointer has-[:checked]:bg-orange-400' >
+                <div className='px-2'>High Protein Vegetarian</div>
+                <input type="checkbox" name="High Protein Vegetarian" value="high-protein-vegeterian" aria-label='High Protein Vegetarian' className='appearance-none h-[1px] w-[1px] m-[-1px]' />
+              </label>
+              <label className='bg-zinc-500 rounded-md flex items-center cursor-pointer has-[:checked]:bg-orange-400' >
+                <div className='px-2'>High Protein Non Vegetarian</div>
+                <input type="checkbox" name="High Protein Non Vegetarian" value="high-protein-non-vegeterian" aria-label='High Protein Non Vegetarian' className='appearance-none h-[1px] w-[1px] m-[-1px]' />
+              </label>
+              <label className='bg-zinc-500 rounded-md flex items-center cursor-pointer has-[:checked]:bg-orange-400' >
+                <div className='px-2'>Eggetarian</div>
+                <input type="checkbox" name="Eggetarian" value="eggtarian" aria-label='Eggetarian' className='appearance-none h-[1px] w-[1px] m-[-1px]' />
+              </label>
+              <label className='bg-zinc-500 rounded-md flex items-center cursor-pointer has-[:checked]:bg-orange-400' >
+                <div className='px-2'>No Onion No Garlic (Sattvic)</div>
+                <input type="checkbox" name="No Onion No Garlic (Sattvic)" value="no-onion-no-garlic" aria-label='No Onion No Garlic (Sattvic)' className='appearance-none h-[1px] w-[1px] m-[-1px]' />
+              </label>
+              <label className='bg-zinc-500 rounded-md flex items-center cursor-pointer has-[:checked]:bg-orange-400' >
+                <div className='px-2'>Gluten Free</div>
+                <input type="checkbox" name="Gluten Free" value="gluten-free" aria-label='Gluten Free' className='appearance-none h-[1px] w-[1px] m-[-1px]' />
+              </label>
+              <label className='bg-zinc-500 rounded-md flex items-center cursor-pointer has-[:checked]:bg-orange-400' >
+                <div className='px-2'>Vegan</div>
+                <input type="checkbox" name="Vegan" value="vegan" aria-label='Vegan' className='appearance-none h-[1px] w-[1px] m-[-1px]' />
+              </label>
+              <label className='bg-zinc-500 rounded-md flex items-center cursor-pointer has-[:checked]:bg-orange-400' >
+                <div className='px-2'>Sugar Free Diet</div>
+                <input type="checkbox" name="Sugar Free Diet" value="sugar-free-diet" aria-label='Sugar Free Diet' className='appearance-none h-[1px] w-[1px] m-[-1px]' />
               </label>
             </div>
           </div>
         </div>
 
         <div className='mx-[1vw] my-[2vw]'>
-          <button className='flex gap-[5vw] w-full' onClick={mealDropdown}>
+          <button className='flex gap-[5vw] w-full' onClick={courseDropdown}>
             <div className='flex gap-[1vw] w-[10vw]'>
               <GiMeal className='text-2xl' />
-              <span>Meal</span>
+              <span>Course</span>
             </div>
-            <BsChevronDown className={`transform transition-transform duration-300 ${isMealOpen ? 'rotate-180' : ''}`} />
+            <BsChevronDown className={`transform transition-transform duration-300 ${isCourseOpen ? 'rotate-180' : ''}`} />
           </button>
-          <div className={`transition-all duration-300 mt-3 ${isMealOpen ? 'block' : 'hidden'}`}>
-            <div className='flex flex-wrap gap-3 ml-[3vw]' data-filter="mealType">
+          <div className={`transition-all duration-300 mt-3 ${isCourseOpen ? 'block' : 'hidden'}`}>
+            <div className='flex flex-wrap gap-3 ml-[3vw]' data-filter="courseType">
               <label className='bg-zinc-500 rounded-md flex items-center cursor-pointer has-[:checked]:bg-orange-400'>
                 <div className='px-2'>Breakfast</div>
                 <input type="checkbox" name="Breakfast" value="breakfast" aria-label='Breakfast' className='appearance-none h-[1px] w-[1px] m-[-1px]' />
@@ -376,70 +278,16 @@ export default function Recipe() {
                 <input type="checkbox" name="Snacks" value="snacks" aria-label='Snacks' className='appearance-none h-[1px] w-[1px] m-[-1px]' />
               </label>
               <label className='bg-zinc-500 rounded-md flex items-center cursor-pointer has-[:checked]:bg-orange-400'>
-                <div className='px-2'>Teatime</div>
-                <input type="checkbox" name="Teatime" value="teatime" aria-label='Teatime' className='appearance-none h-[1px] w-[1px] m-[-1px]' />
-              </label>
-            </div>
-          </div>
-        </div>
-
-        <div className='mx-[1vw] my-[2vw]'>
-          <button className='flex gap-[5vw] w-full' onClick={dishDropdown}>
-            <div className='flex gap-[1vw] w-[10vw]'>
-              <FaConciergeBell className='text-2xl' />
-              <span>Dish</span>
-            </div>
-            <BsChevronDown className={`transform transition-transform duration-300 ${isDishOpen ? 'rotate-180' : ''}`} />
-          </button>
-          <div className={`transition-all duration-300 mt-3 ${isDishOpen ? 'block' : 'hidden'}`}>
-            <div className='flex flex-wrap gap-3 ml-[3vw]' data-filter="dishType">
-              <label className='bg-zinc-500 rounded-md flex items-center cursor-pointer has-[:checked]:bg-orange-400'>
-                <div className='px-2'>Biscuits and Cookies</div>
-                <input type="checkbox" name="Biscuits and Cookies" value="biscuits-and-cookies" aria-label='Biscuits and Cookies' className='appearance-none h-[1px] w-[1px] m-[-1px]' />
+                <div className='px-2'>Dessert</div>
+                <input type="checkbox" name="Dessert" value="dessert" aria-label='Dessert' className='appearance-none h-[1px] w-[1px] m-[-1px]' />
               </label>
               <label className='bg-zinc-500 rounded-md flex items-center cursor-pointer has-[:checked]:bg-orange-400'>
-                <div className='px-2'>Bread</div>
-                <input type="checkbox" name="Bread" value="bread" aria-label='Bread' className='appearance-none h-[1px] w-[1px] m-[-1px]' />
+                <div className='px-2'>Main Course</div>
+                <input type="checkbox" name="Main Course" value="main-course" aria-label='Main Course' className='appearance-none h-[1px] w-[1px] m-[-1px]' />
               </label>
               <label className='bg-zinc-500 rounded-md flex items-center cursor-pointer has-[:checked]:bg-orange-400'>
-                <div className='px-2'>Cereals</div>
-                <input type="checkbox" name="Cereals" value="cereals" aria-label='Cereals' className='appearance-none h-[1px] w-[1px] m-[-1px]' />
-              </label>
-              <label className='bg-zinc-500 rounded-md flex items-center cursor-pointer has-[:checked]:bg-orange-400'>
-                <div className='px-2'>Condiments and sauces</div>
-                <input type="checkbox" name="Condiments and sauces" value="condiments-and-sauces" aria-label='Condiments and sauces' className='appearance-none h-[1px] w-[1px] m-[-1px]' />
-              </label>
-              <label className='bg-zinc-500 rounded-md flex items-center cursor-pointer has-[:checked]:bg-orange-400'>
-                <div className='px-2'>Desserts</div>
-                <input type="checkbox" name="Desserts" value="desserts" aria-label='Desserts' className='appearance-none h-[1px] w-[1px] m-[-1px]' />
-              </label>
-              <label className='bg-zinc-500 rounded-md flex items-center cursor-pointer has-[:checked]:bg-orange-400'>
-                <div className='px-2'>Drinks</div>
-                <input type="checkbox" name="Drinks" value="drinks" aria-label='Drinks' className='appearance-none h-[1px] w-[1px] m-[-1px]' />
-              </label>
-              <label className='bg-zinc-500 rounded-md flex items-center cursor-pointer has-[:checked]:bg-orange-400'>
-                <div className='px-2'>Main course</div>
-                <input type="checkbox" name="Main course" value="main course" aria-label='Main course' className='appearance-none h-[1px] w-[1px] m-[-1px]' />
-              </label>
-              <label className='bg-zinc-500 rounded-md flex items-center cursor-pointer has-[:checked]:bg-orange-400'>
-                <div className='px-2'>Cake</div>
-                <input type="checkbox" name="Cake" value="cake" aria-label='Cake' className='appearance-none h-[1px] w-[1px] m-[-1px]' />
-              </label>
-              <label className='bg-zinc-500 rounded-md flex items-center cursor-pointer has-[:checked]:bg-orange-400'>
-                <div className='px-2'>Salad</div>
-                <input type="checkbox" name="Salad" value="salad" aria-label='Salad' className='appearance-none h-[1px] w-[1px] m-[-1px]' />
-              </label>
-              <label className='bg-zinc-500 rounded-md flex items-center cursor-pointer has-[:checked]:bg-orange-400'>
-                <div className='px-2'>Soup</div>
-                <input type="checkbox" name="Soup" value="soup" aria-label='Soup' className='appearance-none h-[1px] w-[1px] m-[-1px]' />
-              </label>
-              <label className='bg-zinc-500 rounded-md flex items-center cursor-pointer has-[:checked]:bg-orange-400'>
-                <div className='px-2'>Starter</div>
-                <input type="checkbox" name="Starter" value="starter" aria-label='Starter' className='appearance-none h-[1px] w-[1px] m-[-1px]' />
-              </label>
-              <label className='bg-zinc-500 rounded-md flex items-center cursor-pointer has-[:checked]:bg-orange-400'>
-                <div className='px-2'>Sweet</div>
-                <input type="checkbox" name="Sweet" value="sweet" aria-label='Sweet' className='appearance-none h-[1px] w-[1px] m-[-1px]' />
+                <div className='px-2'>Appetizer</div>
+                <input type="checkbox" name="Appetizer" value="appetizer" aria-label='Appetizer' className='appearance-none h-[1px] w-[1px] m-[-1px]' />
               </label>
             </div>
           </div>
@@ -464,6 +312,10 @@ export default function Recipe() {
                 <input type="checkbox" name="South Indian" value="south-indian" aria-label='South Indian' className='appearance-none h-[1px] w-[1px] m-[-1px]' />
               </label>
               <label className='bg-zinc-500 rounded-md flex items-center cursor-pointer has-[:checked]:bg-orange-400'>
+                <div className='px-2'>North Indian</div>
+                <input type="checkbox" name="North Indian" value="north-indian" aria-label='North Indian' className='appearance-none h-[1px] w-[1px] m-[-1px]' />
+              </label>
+              <label className='bg-zinc-500 rounded-md flex items-center cursor-pointer has-[:checked]:bg-orange-400'>
                 <div className='px-2'>Gujrati</div>
                 <input type="checkbox" name="Gujrati" value="gujrati" aria-label='Gujrati' className='appearance-none h-[1px] w-[1px] m-[-1px]' />
               </label>
@@ -474,6 +326,18 @@ export default function Recipe() {
               <label className='bg-zinc-500 rounded-md flex items-center cursor-pointer has-[:checked]:bg-orange-400'>
                 <div className='px-2'>Hydrabadi</div>
                 <input type="checkbox" name="Hydrabadi" value="hydrabadi" aria-label='Hydrabadi' className='appearance-none h-[1px] w-[1px] m-[-1px]' />
+              </label>
+              <label className='bg-zinc-500 rounded-md flex items-center cursor-pointer has-[:checked]:bg-orange-400'>
+                <div className='px-2'>Begnali</div>
+                <input type="checkbox" name="Begnali" value="begnali" aria-label='Begnali' className='appearance-none h-[1px] w-[1px] m-[-1px]' />
+              </label>
+              <label className='bg-zinc-500 rounded-md flex items-center cursor-pointer has-[:checked]:bg-orange-400'>
+                <div className='px-2'>Maharashtrian</div>
+                <input type="checkbox" name="Maharashtrian" value="maharashtrian" aria-label='Maharashtrian' className='appearance-none h-[1px] w-[1px] m-[-1px]' />
+              </label>
+              <label className='bg-zinc-500 rounded-md flex items-center cursor-pointer has-[:checked]:bg-orange-400'>
+                <div className='px-2'>Punjabi</div>
+                <input type="checkbox" name="Punjabi" value="punjabi" aria-label='Punjabi' className='appearance-none h-[1px] w-[1px] m-[-1px]' />
               </label>
             </div>
           </div>
@@ -487,28 +351,27 @@ export default function Recipe() {
       </div>
 
       <div className='h-[100vh] w-[80%] flex flex-wrap gap-10 items-center justify-center overflow-y-scroll'>
-        {firstTwentyItems.map(
-          (item, index) => (
-            <div key={index} className='recipe mt-5 text-black' onClick={() => handleRecipeClick(item)} >
-              <div className='relative w-[18vw] h-[40vh] flex'>
-                <img src="../Images/cardBg.png" alt="dish" className='w-full h-full opacity-60' />
-                <div className='absolute top-0 left-0 w-full h-full p-3 flex flex-col justify-center items-center '>
-                  <img src="../Images/FoodPlate.jpg" alt="" className='h-[60%] w-[60%]' />
-                  <h2 className='text-lg font-bold'>{item.RecipeName}</h2>
-                  <div className='flex flex-wrap gap-2'>
-                    <GiMeal className='text-xl' />
-                    <span>{item.Diet}</span>
-                    <LuAlarmClock className='text-xl' />
-                    <span>{item.TotalTimeInMins + "mins"}</span>
-                  </div> 
+        {
+          (!firstTwentyItems) ? "Not Found" : firstTwentyItems.map(
+            (item) => (
+              <div key={item.Srno} className='recipe mt-5 text-black' onClick={() => { navigate(`/${item.Srno}`) }}>
+                <div className='relative w-[16vw] h-[40vh] flex'>
+                  <img src="../Images/bread1.png" alt="dish" className='w-full h-full opacity-70' />
+                  <div className='absolute top-0 left-0 w-full h-full p-3 flex flex-col justify-center items-center '>
+                    <img src={item.imageUrl} alt="" className='h-[60%] w-[60%] rounded-xl' />
+                    <h2 className='text-lg font-bold w-[15vw] text-center'>{item.TranslatedRecipeName}</h2>
+                    <div className='flex flex-wrap gap-2'>
+                      <GiMeal className='text-xl' />
+                      <span>{item.Diet}</span>
+                      <LuAlarmClock className='text-xl' />
+                      <span>{item.TotalTimeInMins + "mins"}</span>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))
+        }
       </div>
-
-        {selectedRecipe && <RecipeDetail item={selectedRecipe} />}
-   
     </div>
   )
 }
