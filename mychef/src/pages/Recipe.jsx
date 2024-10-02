@@ -87,7 +87,7 @@ export default function Recipe() {
           <button className='flex gap-[5vw] w-full' onClick={cookingDropdown}>
             <div className='flex gap-[1vw] w-[10vw]'>
               <LuAlarmClock className='text-2xl' />
-              <span>Cooking Time</span>
+              <span>Cook Time</span>
             </div>
             <BsChevronDown className={`transform transition-transform duration-300 ${isCookingOpen ? 'rotate-180' : ''}`} />
           </button>
@@ -350,22 +350,23 @@ export default function Recipe() {
 
       </div>
 
-      <div className='h-[100vh] w-[80%] flex flex-wrap gap-10 items-center justify-center overflow-y-scroll'>
+      <div className='h-[100vh] w-[80%] mb-5 flex flex-wrap gap-10 items-center justify-center overflow-y-scroll'>
         {
           (!firstTwentyItems) ? "Not Found" : firstTwentyItems.map(
             (item) => (
-              <div key={item.Srno} className='recipe mt-5 text-black' onClick={() => { navigate(`/${item.Srno}`) }}>
-                <div className='relative w-[16vw] h-[40vh] flex'>
-                  <img src="../Images/bread1.png" alt="dish" className='w-full h-full opacity-70' />
-                  <div className='absolute top-0 left-0 w-full h-full p-3 flex flex-col justify-center items-center '>
-                    <img src={item.imageUrl} alt="" className='h-[60%] w-[60%] rounded-xl' />
-                    <h2 className='text-lg font-bold w-[15vw] text-center'>{item.TranslatedRecipeName}</h2>
+              <div key={item.Srno} className='recipe mt-5 text-black'>
+                <div className='relative w-[16vw] h-[45vh] flex '>
+                  <img src="../Images/bread1.png" alt="dish" className='w-full h-full  ' />
+                  <div className='absolute top-0 left-0 w-full h-full flex flex-col justify-center items-center gap-2'>
+                    <img src={item.imageUrl} alt="" className='h-[40%] w-[55%] rounded-xl' />
+                    <h1 className='text-lg font-bold w-[15vw] h-max text-center truncate '>{item.TranslatedRecipeName}</h1>  {/*truncate is used to hide the content that excceds the given width and put ...*/} 
                     <div className='flex flex-wrap gap-2'>
                       <GiMeal className='text-xl' />
-                      <span>{item.Diet}</span>
+                      <span className='truncate w-12'>{item.Diet}</span>
                       <LuAlarmClock className='text-xl' />
                       <span>{item.TotalTimeInMins + "mins"}</span>
                     </div>
+                    <button className='border-none outline-none p-2 bg-orange-400 hover:bg-orange-500 rounded-lg' onClick={() => { navigate(`/${item.Srno}`) }}>View Recipe</button>
                   </div>
                 </div>
               </div>

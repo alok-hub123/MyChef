@@ -6,27 +6,22 @@ import { CgProfile } from "react-icons/cg";
 
 export default function Dashboard() {
 
-  const [selected, setSelected] = useState('home');
+  const [selected, setSelected] = useState('profile');
 
   const handleIconClick = (icon) => {
     setSelected(icon);
   };
 
   const icons = [
-    { name: 'Home', icon: <FaHome />, id: 'home', path: '/dashboard' },
-    { name: 'Recipe', icon: <FaUtensils />, id: 'recipe', path: '/dashboard/recipe' },
-    { name: 'Recipe Generator', icon: <FaListAlt />, id: 'recipe-generator', path: '/dashboard/generator' },
-    { name: 'Tutorial', icon: <FaVideo />, id: 'tutorial', path: '/dashboard/tutorial' },
+    { name: 'Profile', icon: <FaUser />, id: 'profile', path: '/dashboard' },
     { name: 'Saved Recipe', icon: <FaHeart />, id: 'favourite', path: '/dashboard/favourite' },
-    { name: 'Profile', icon: <FaUser />, id: 'profile', path: '/dashboard/profile' },
-    { name: 'Shop', icon: <FaShoppingCart />, id: 'shop', path: '/dashboard/shop' },
   ];
 
   return (
     <div>
       <nav className="sticky top-0 z-10 w-full px-3 py-2 font-['Neue Montreal'] flex justify-between items-center text-white backdrop-blur" >
         <div className='bg-cover'>
-          <img src="./Images/logo.png" alt="logo" className='logo w-30 h-10 ' />
+          <img src="/Images/logo.png" alt="logo" className='logo w-30 h-10 ' />
         </div>
         <div className="text-3xl">
           <CgProfile />

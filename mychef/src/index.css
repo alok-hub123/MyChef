@@ -3,5 +3,6 @@
 @tailwind utilities;
 
 body{
-    background:rgb(56, 53, 53)
+    background:rgb(56, 53, 53);
+    font-family: 'Poppins';
 }

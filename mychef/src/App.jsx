@@ -11,7 +11,6 @@ import Tutorial from './pages/Tutorial';
 import Favourite from './pages/Favourite';
 import Profile from './pages/Profile';
 import RecipeDetail from "./pages/RecipeDetail";
-import selectedRecipe from "./pages/Recipe.jsx"
 
 
 function App() {
@@ -33,6 +32,10 @@ function App() {
             element: <RecipeGenerator />
           },
           {
+            path: '/tutorial',
+            element: <Tutorial />
+          },
+          {
             path: '/shop',
             element: <Shop />
           },
@@ -48,32 +51,13 @@ function App() {
         children: [
           {
             path: '/dashboard',
-            element: <Home />,
-          },
-          {
-            path: '/dashboard/recipe',
-            element: <Recipe />
-          },
-          {
-            path: '/dashboard/generator',
-            element: <RecipeGenerator />
-          },
-          {
-            path: '/dashboard/tutorial',
-            element: <Tutorial />
+            element: <Profile />
           },
           {
             path: '/dashboard/favourite',
             element: <Favourite />
           },
-          {
-            path: '/dashboard/profile',
-            element: <Profile />
-          },
-          {
-            path: '/dashboard/shop',
-            element: <Shop />
-          }, 
+          
         ]
       },
       {
