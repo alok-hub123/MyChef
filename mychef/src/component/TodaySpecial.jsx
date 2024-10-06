@@ -1,12 +1,56 @@
 import { RxArrowTopRight } from "react-icons/rx";
-import { ServiceData } from "../constants/index2";
+import { todaySpecial } from "../constants/todaySpecial.jsx";
 import { useGSAP } from '@gsap/react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import IndianFoodDataset from '../constants/IndianFoodDataset.json'
+import { useState, useEffect} from 'react';
+import { useNavigate } from "react-router-dom";
 
 gsap.registerPlugin(ScrollTrigger);
 
 const TodaySpecial = () => {
+
+  const navigate = useNavigate();
+
+  const [todaySpecialDish, setTodaySpecialDish] = useState({});
+  const [currentTime, setCurrentTime] = useState(new Date().getHours());
+
+  useEffect(() => {
+    const storageKey = `todaySpecialDish-${currentTime < 4 ? 'before4am' : 'after4am'}`;
+    const storedTodaySpecial = localStorage.getItem(storageKey);
+
+    if (storedTodaySpecial) {
+      setTodaySpecialDish(JSON.parse(storedTodaySpecial));
+    } else {
+      const fetchTodaySpecial = () => {
+        const breakfastRecipe = IndianFoodDataset.find((recipe) => recipe.Course.includes('Breakfast'));
+        const lunchRecipe = IndianFoodDataset.find((recipe) => recipe.Course.includes('Lunch'));
+        const dinnerRecipe = IndianFoodDataset.find((recipe) => recipe.Course.includes('Dinner'));
+        const snacksRecipe = IndianFoodDataset.find((recipe) => recipe.Course.includes('Snack'));
+        const sideDishRecipe = IndianFoodDataset.find((recipe) => recipe.Course.includes('Side Dish'));
+
+        const todaySpecialRecipes = {
+          Breakfast: breakfastRecipe,
+          Lunch: lunchRecipe,
+          Dinner: dinnerRecipe,
+          Snack: snacksRecipe,
+          'Side Dish': sideDishRecipe,
+        };
+
+        localStorage.setItem(storageKey, JSON.stringify(todaySpecialRecipes));
+        setTodaySpecialDish(todaySpecialRecipes);
+      };
+
+      fetchTodaySpecial();
+    }
+  }, [currentTime]);
+
+  const handleRecipeClick = (course) => {
+    const recipe = todaySpecialDish[course];
+    // Navigate to the recipe page
+    navigate('/'+recipe.Srno);
+  };
 
   // useGSAP(() => {
   //   gsap.from(".l_anim", {
@@ -52,8 +96,8 @@ const TodaySpecial = () => {
       <img src="/Images/dinner.png" alt="" className="r_anim h-[20vh] w-[14vw] absolute right-0 bottom-0" />
 
       <div className="h-[90%] flex flex-wrap justify-center items-center">
-        {ServiceData.map((item) => (
-          <div key={item.title} className="relative text-white rounded-xl h-[45vh] w-[25vw] cursor-pointer bg-contain group" >
+        {todaySpecial.map((item) => (
+          <div key={item.title} className="relative text-white rounded-xl h-[45vh] w-[25vw] cursor-pointer bg-contain group" onClick={() => handleRecipeClick(item.title)}>
             <img src="/Images/woodenPlate.png" alt="" className="woodenPlate h-[45vh]  bg-contain bg-center group-hover:opacity-50 transition duration-300" />
             <div className="h-[60%] w-[60%] absolute  top-[54%] left-[43%]  -translate-x-1/2 -translate-y-1/2  bg-contain bg-center bg-no-repeat flex items-center justify-center" style={{ backgroundImage: `url(${item.backgroundImage})` }}>
               <h1 className="text-2xl group-hover:font-bold">{item.title} </h1>

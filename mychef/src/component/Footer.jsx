@@ -1,6 +1,6 @@
 import React from 'react';
 import { FaFacebook, FaInstagram, FaTwitter, FaLinkedin, FaYoutube } from 'react-icons/fa';
-
+import { Link } from 'react-router-dom';
 
 const Footer = () => {
   return (
@@ -14,12 +14,11 @@ const Footer = () => {
           <div className="mb-4 md:mb-0">
             <h5 className="text-lg font-bold">Quick Links</h5>
             <ul className="mt-2">
-              <li><a href="#" className="text-gray-400 hover:text-white">Home</a></li>
-              <li><a href="#" className="text-gray-400 hover:text-white">About</a></li>
-              <li><a href="#" className="text-gray-400 hover:text-white">Contact</a></li>
-              <li><a href="#" className="text-gray-400 hover:text-white">Genrator</a></li>
-              <li><a href="#" className="text-gray-400 hover:text-white">Recipe</a></li>
-              <li><a href="#" className="text-gray-400 hover:text-white">Kitchen Essential</a></li>
+              <li><Link to='/' className="text-gray-400 hover:text-white">Home</Link></li>
+              <li><Link to='/recipe' className="text-gray-400 hover:text-white">Recipe</Link></li>
+              <li><Link to='/generator' className="text-gray-400 hover:text-white">Generator</Link></li>
+              <li><Link to='/tutorial' className="text-gray-400 hover:text-white">Totorial</Link></li>
+              <li><Link to='/shop' className="text-gray-400 hover:text-white">Shop</Link></li>
             </ul>
           </div>
           <div>
@@ -49,7 +48,7 @@ const Footer = () => {
           <p className="text-sm">&copy; 2024 Recipe Finder and Generator. All rights reserved.</p>
         </div>
       </div>
-      <img src="/Images/ginger.png" alt="" className=' h-[11vh] w-[8vw] absolute left-0 top-[2vh]' />
+      <img src="/Images/ginger.png" alt="" className=' h-[15vh] w-[10vw] absolute left-0 bottom-[2vh]' />
       <img src="/Images/potato.png" alt="" className='h-[11vh] w-[10vw] absolute right-0 bottom-0' />
     </footer>
   );

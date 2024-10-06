@@ -48,12 +48,12 @@ function Tutorial() {
               >
                 Tutorial
               </button>
-              <button
+              {/* <button
                 className={`text-lg font-semibold ${activeTab === 'clip' ? 'underline text-orange-400' : 'text-gray-500'}`}
                 onClick={() => setActiveTab('clip')}
               >
                 Clip
-              </button>
+              </button> */}
             </div>
             <div>
             <input
@@ -73,7 +73,7 @@ function Tutorial() {
                 <div key={index} className="bg-white p-4 shadow-lg rounded-lg">
                   <video className="w-full rounded-lg" controls>
                     <source src={tutorial.videoUrl} type="video/mp4" />
-                    Your browser does not support the video tag.
+                      Your browser does not support the video tag.
                   </video>
                   <p className="mt-2 text-lg font-semibold">{tutorial.title}</p>
                 </div>

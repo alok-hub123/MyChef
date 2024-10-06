@@ -1,15 +1,45 @@
 import { Swiper, SwiperSlide } from 'swiper/react';
-import ReactPlayer from "react-player";
-
 import 'swiper/css';
 import 'swiper/css/effect-coverflow';
 import 'swiper/css/pagination';
 import { RxArrowTopRight } from 'react-icons/rx';
-
 import { EffectCoverflow, Pagination, Autoplay } from 'swiper/modules';
-import { ServiceData } from '../constants/index';
+import IndainFoodDataset from '../constants/IndianFoodDataset.json';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export default function FrameSlider() {
+
+    const navigate = useNavigate();
+    const [randomRecipe, setRandomRecipe] = useState();
+
+    useEffect(() => {
+        const getRandomRecipes = () => {
+          const currentTime = new Date().getHours();
+          const isBefore4am = currentTime < 4;
+          const storageKey = `randomRecipes-${isBefore4am ? 'before4am' : 'after4am'}`;
+          const storedRecipes = localStorage.getItem(storageKey);
+      
+          if (storedRecipes) {
+            return JSON.parse(storedRecipes);
+          }
+      
+          const randomIndices = [];
+          while (randomIndices.length < 10) {
+            const randomIndex = Math.floor(Math.random() * IndainFoodDataset.length);
+            if (!randomIndices.includes(randomIndex)) {
+              randomIndices.push(randomIndex);
+            }
+          }
+          const randomRecipes = randomIndices.map((index) => IndainFoodDataset[index]);
+      
+          localStorage.setItem(storageKey, JSON.stringify(randomRecipes));
+          return randomRecipes;
+        };
+      
+        setRandomRecipe(getRandomRecipes());
+      }, [IndainFoodDataset]);
+
     return (
         <> 
         {/* Main wrapper for full height and background setup */}
@@ -54,17 +84,17 @@ export default function FrameSlider() {
                         modules={[EffectCoverflow, Pagination, Autoplay]}
                         className="mySwiper z-20"
                     >
-                        {ServiceData.map((item) => (
-                            <SwiperSlide key={item.title}>
+                        {!randomRecipe ? "Loading" :  randomRecipe.map((item) => (
+                            <SwiperSlide key={item.Srno}>
                                 <div 
                                     className="h-[50vh] w-[20vw] group relative text-white rounded-xl px-6 py-8 m-[5vw] overflow-hidden cursor-pointer bg-cover bg-center" 
-                                    style={{ backgroundImage: `url(${item.backgroundImage})` }} 
+                                    style={{ backgroundImage: `url(${item.imageUrl})` }} 
+                                    onClick={() => { navigate(`/${item.Srno}`) }}
                                 >
                                     <div className="absolute inset-0 opacity-10 group-hover:opacity-50" />
                                     <div className="relative flex flex-col gap-3">
-                                        <item.icon className="text-orange-400 group-hover:text-orange-600 w-[32px] h-[32px]" />
-                                        <h1 className="text-xl lg:text-2xl">{item.title}</h1>
-                                        <p className="lg:text-[18px]">{item.content}</p>
+                                        <h1 className="text-xl lg:text-2xl">{item.TranslatedRecipeName}</h1>
+                                        <span className="lg:text-[18px]">{item.Diet}</span>
                                     </div>
                                     <RxArrowTopRight className="absolute bottom-5 left-5 w-[35px] h-[35px] text-white group-hover:text-orange-500 group-hover:rotate-45 duration-100" />
                                 </div>

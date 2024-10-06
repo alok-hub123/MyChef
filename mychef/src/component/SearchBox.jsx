@@ -3,6 +3,7 @@ import { CiSearch } from "react-icons/ci";
 import { useGSAP } from '@gsap/react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useNavigate } from 'react-router-dom';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -55,15 +56,15 @@ function SearchBox() {
 
 //search box logic
   const [searchTerm, setSearchTerm] = useState('');
+  const navigate = useNavigate();
 
   const handleSearch = (e) => {
-    setSearchTerm(e.target.value);
+    setSearchTerm(e.target.value.toLowerCase()); 
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Searching for:', searchTerm);
-    // You can add your logic to handle the search here
+    navigate(`/recipe?query=${searchTerm}`);
   };
 
   return (
@@ -78,14 +79,13 @@ function SearchBox() {
             placeholder="Search..."
             className="w-full px-4 py-2 text-lg text-gray-700 bg-white  rounded-3xl focus:outline-none absolute top-[33vh]"
           />
-          <CiSearch className='text-2xl absolute right-[1vw] top-[34vh] cursor-pointer'/>
+          <CiSearch className='text-2xl absolute right-[1vw] top-[34vh] cursor-pointer' onClick={handleSubmit} />
         </form>
         <img src="/Images/carrotanim.png" alt="" className='carrot_anim h-[20vh] w-[5vw] absolute left-[29vw] top-[21vh]'/>
         <img src="/Images/tomatotree.png" alt="" className='treeAnim h-[45vh] w-[10vw] absolute left-0 bottom-[1vh]'/>
         <img src="/Images/r_spoon.png" alt="" className='right_anim h-[23vh] w-[15vw] absolute right-0'/>
         <img src="/Images/tadka.png" alt="" className='right_anim h-[19vh] w-[13vw] absolute right-0 bottom-0'/>
       </div>
-      <div className=' h-[1vh] w-full bg-black '></div>
 
     </>
   );
