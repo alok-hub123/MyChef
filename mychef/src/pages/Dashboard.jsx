@@ -29,7 +29,7 @@ export default function Dashboard() {
       </nav>
       <Outlet />   
       <div className="flex flex-col items-center justify-center">
-        <div className="fixed bottom-[3vh] flex space-x-6 bg-white rounded-xl">
+        <div className="fixed bottom-[3vh] flex space-x-6 bg-white  rounded-xl">
           {icons.map((item) => (
             <div key={item.id} className="flex flex-col items-center">
               <Link to={item.path}>

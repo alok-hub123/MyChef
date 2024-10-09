@@ -6,7 +6,7 @@ function Navbar() {
   const [selected, setSelected] = useState();
 
   return (
-    <nav className="sticky top-0 z-[1000] w-full px-20 mb-[2vh] font-['Neue Montreal'] flex justify-between items-center text-white backdrop-blur-md" >
+    <nav className="sticky top-0 z-50 w-full px-20 font-['Neue Montreal'] flex justify-between items-center shadow text-white backdrop-blur-md" >
       <div className='bg-cover'>
         <img src="./Images/logo.png" alt="logo" className='logo w-30 h-14 ' />
       </div>

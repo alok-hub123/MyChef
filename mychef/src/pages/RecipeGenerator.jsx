@@ -12,7 +12,7 @@ export default function RecipeGenerator() {
   };
 
   return (
-    <div className='w-full h-[100vh] text-black flex flex-col justify-center items-center bg-zinc-500 '>
+    <div className='w-full h-[100vh] text-black flex flex-col justify-center items-center bg-zinc-800 '>
 
       <img src="/Images/l_spoon.png" alt="" className=" h-[35vh] w-[25vw] absolute top-[5vh] left-[-5vw]" />
       <img src="/Images/tomato.png" alt="" className='absolute right-0 top-[10vh] h-[20vh] ' />
@@ -85,12 +85,14 @@ export default function RecipeGenerator() {
             </div>
 
             {/* Generate Recipe Button */}
+            <div className='flex flex-col justify-center items-center'>
             <button
               onClick={handleGenerateRecipes}
-              className="w-full bg-orange-400 text-white font-semibold py-2 px-4 rounded-md hover:bg-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-opacity-50 transition duration-4"
+              className="w-max bg-orange-400 text-white font-semibold py-2 px-4 rounded-md hover:bg-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-opacity-50 transition duration-4"
             >
               Generate Recipe
             </button>
+            </div>
           </div>
       </div>
     </div>

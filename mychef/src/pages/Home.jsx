@@ -5,15 +5,17 @@ import FrameSlider from '../component/FrameSlider'
 import SearchBox from '../component/SearchBox'
 import Line from '../component/Line'
 
+
 function Home() {
     return (
         <>
-            <div>
+            <div className='bg-zinc-800'>
                 <LandingPage />
                 <TodaySpecial />
                 <FrameSlider />
                 <SearchBox />
                 <Line />
+                
             </div>
         </>
     )

@@ -17,10 +17,10 @@ function Shop() {
   );
 
   return (
-    <div className="bg-white h-screen">
+    <div className="bg-zinc-800 h-screen text-white">
       <div className="flex flex-wrap  h-full">
         {/* Sidebar */}
-        <div className="w-1/5 xl:w-1/6 bg-gray-100 p-4 text-xl">
+        <div className="w-1/5 xl:w-1/6 p-4 text-xl">
           <h2 className="text-2xl font-bold mb-4">Shop</h2>
           <ul className='space-y-5'>
             <li
@@ -81,7 +81,7 @@ function Shop() {
             <div className="grid grid-cols-3 xl:grid-cols-4 gap-4">
               {filteredProducts.map(item => (
                 <a key={item.name} href={item.link} target="_blank" rel="noopener noreferrer">
-                  <div className="border p-4 rounded shadow-sm hover:shadow-lg ">
+                  <div className="border p-4 rounded-xl shadow-sm shadow-zinc-100 hover:shadow-md hover:shadow-zinc-100  bg-zinc-700">
                     <img src={item.image} alt={item.name} className="w-full h-[20vh] object-contain mb-2" />
                     <div className='flex flex-col items-center gap-y-2'>
                       <h3 className="text-lg font-bold">{item.name}</h3>

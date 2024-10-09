@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { BsChevronDown } from "react-icons/bs";
 import { LuAlarmClock } from "react-icons/lu";
 import { GiNoodles } from 'react-icons/gi';
@@ -6,8 +6,7 @@ import { FaCarrot } from 'react-icons/fa';
 import { GiMeal } from 'react-icons/gi';
 import { FaGlobe } from 'react-icons/fa';
 import IndianFoodDataset from '../constants/IndianFoodDataset.json';
-import { useNavigate } from 'react-router-dom';
-import { useLocation } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 // const fetchData = async () => {
 //   const query = 'indian';
@@ -27,7 +26,9 @@ const firstTwentyItems = fetchTwentyItems(IndianFoodDataset);
 
 export default function Recipe() {
 
+  const [filteredItems, setFilteredItems] = useState([]);
   const navigate = useNavigate();
+  const location = useLocation();
 
   // Call fetchData when the component mounts
   // useEffect(() => {
@@ -74,47 +75,113 @@ export default function Recipe() {
   };
 
   const handleClear = () => {
-    setClearChecked(true);
     setCookTime('');
     setServing('');
     setDiet([]);
     setCourse([]);
     setCuisine([]);
     setFilteredItems(firstTwentyItems);
+    setQuery('');
     document.querySelectorAll('input[type="radio"]').forEach(radio => radio.checked = false);
     document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => checkbox.checked = false);
+
+    // Clear the URL parameters
+    navigate({
+      search: '',
+    });
   };
 
   const handleApply = () => {
+    // Gather all filter states into query params
+    const queryParams = new URLSearchParams();
+
+    if (cookTime) queryParams.set('cookTime', cookTime);
+    if (serving) queryParams.set('serving', serving);
+    if (diet.length > 0) queryParams.set('diet', diet.join(','));
+    if (course.length > 0) queryParams.set('course', course.join(','));
+    if (cuisine.length > 0) queryParams.set('cuisine', cuisine.join(','));
+
+    // Navigate with the new query parameters
+    navigate({
+      search: queryParams.toString()
+    });
+
+    // Filter the items based on the applied filters
     const filtered = IndianFoodDataset.filter((item) => {
       let isValid = true;
-  
+
       if (cookTime && !isValidCookTime(item, cookTime)) {
         isValid = false;
       }
-  
+
       if (serving && !isValidServing(item, serving)) {
         isValid = false;
       }
-  
+
       if (diet.length > 0 && !isValidDiet(item, diet)) {
         isValid = false;
       }
-  
+
       if (course.length > 0 && !isValidCourse(item, course)) {
         isValid = false;
       }
-  
+
       if (cuisine.length > 0 && !isValidCuisine(item, cuisine)) {
         isValid = false;
       }
-  
+
       return isValid;
     });
-  
+
     setFilteredItems(filtered.slice(0, 20));
   };
-  
+
+  //retrieve the filter parameters from the URL and reapply them to ensure the filtered items remain consistent.
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+
+    const savedCookTime = params.get('cookTime') || '';
+    const savedServing = params.get('serving') || '';
+    const savedDiet = params.get('diet') ? params.get('diet').split(',') : [];
+    const savedCourse = params.get('course') ? params.get('course').split(',') : [];
+    const savedCuisine = params.get('cuisine') ? params.get('cuisine').split(',') : [];
+
+    setCookTime(savedCookTime);
+    setServing(savedServing);
+    setDiet(savedDiet);
+    setCourse(savedCourse);
+    setCuisine(savedCuisine);
+
+    // Filter the items based on URL parameters
+    const filtered = IndianFoodDataset.filter((item) => {
+      let isValid = true;
+
+      if (savedCookTime && !isValidCookTime(item, savedCookTime)) {
+        isValid = false;
+      }
+
+      if (savedServing && !isValidServing(item, savedServing)) {
+        isValid = false;
+      }
+
+      if (savedDiet.length > 0 && !isValidDiet(item, savedDiet)) {
+        isValid = false;
+      }
+
+      if (savedCourse.length > 0 && !isValidCourse(item, savedCourse)) {
+        isValid = false;
+      }
+
+      if (savedCuisine.length > 0 && !isValidCuisine(item, savedCuisine)) {
+        isValid = false;
+      }
+
+      return isValid;
+    });
+
+    setFilteredItems(filtered.slice(0, 20));
+  }, [location.search]);
+
   // Helper functions for validation
   const isValidCookTime = (item, cookTime) => {
     if (cookTime === '10-20') {
@@ -132,48 +199,47 @@ export default function Recipe() {
     }
     return true;
   };
-  
+
   const isValidServing = (item, serving) => {
     if (serving === '1') {
-      return item.Servings === 1;
+      return item.Servings === '1';
     } else if (serving === '2') {
-      return item.Servings === 2;
+      return item.Servings === '2';
     } else if (serving === '3') {
-      return item.Servings === 3;
+      return item.Servings === '3';
     } else if (serving === '4') {
-      return item.Servings === 4;
+      return item.Servings === '4';
     } else if (serving === '5') {
-      return item.Servings === 5;
+      return item.Servings === '5';
     } else if (serving === '6') {
-      return item.Servings === 6;
+      return item.Servings === '6';
     } else if (serving === '6+') {
       return item.Servings > 6;
     }
     return true;
   };
-  
+
   const isValidDiet = (item, diet) => {
     return diet.includes(item.Diet.toLowerCase());
   };
-  
+
   const isValidCourse = (item, course) => {
     return course.includes(item.Course.toLowerCase());
   };
-  
+
   const isValidCuisine = (item, cuisine) => {
     return cuisine.includes(item.Cuisine.toLowerCase());
   };
 
   //logic for homepage search box
-  const location = useLocation();
+
 
   const params = new URLSearchParams(location.search);
   const searchQueryHome = params.get('query');
 
   //search logic for current(recipe page) search box
   const [query, setQuery] = useState(searchQueryHome || '');
-  const [filteredItems, setFilteredItems] = useState([]);
-
+  
   useEffect(() => {
     if (searchQueryHome) {
       const filtered = IndianFoodDataset.filter((item) => {
@@ -181,7 +247,9 @@ export default function Recipe() {
           item.TranslatedRecipeName.toLowerCase().includes(searchQueryHome) ||
           item.Diet.toLowerCase().includes(searchQueryHome) ||
           item.Course.toLowerCase().includes(searchQueryHome) ||
-          item.Cuisine.toLowerCase().includes(searchQueryHome)
+          item.Cuisine.toLowerCase().includes(searchQueryHome) ||
+          item.Servings.toLowerCase().includes(searchQueryHome) ||
+          item.TotalTimeInMins.toLowerCase().includes(searchQueryHome)
         );
       });
       setFilteredItems(filtered.slice(0, 20));
@@ -190,17 +258,27 @@ export default function Recipe() {
     }
   }, [searchQueryHome]);
 
+  //logic for trecipe page search box
   const handleSearch = (e) => {
-    setQuery(e.target.value.toLowerCase());
+    const newQuery = e.target.value.toLowerCase();
+    setQuery(newQuery);
+
+    // Update the URL query parameter with `useNavigate` beacause the data should not rerender
+    navigate({
+      search: `?query=${newQuery}`
+    });
+
     const filtered = IndianFoodDataset.filter((item) => {
       return (
-        item.TranslatedRecipeName.toLowerCase().includes(query) ||
-        item.Diet.toLowerCase().includes(query) ||
-        item.Course.toLowerCase().includes(query) ||
-        item.Cuisine.toLowerCase().includes(query)
+        item.TranslatedRecipeName.toLowerCase().includes(newQuery) ||
+        item.Diet.toLowerCase().includes(newQuery) ||
+        item.Course.toLowerCase().includes(newQuery) ||
+        item.Cuisine.toLowerCase().includes(newQuery) ||
+        item.Servings.toLowerCase().includes(newQuery) ||
+        item.TotalTimeInMins.toLowerCase().includes(newQuery)
       );
     });
-    setFilteredItems(filtered<=20 ? filtered : filtered.slice(0, 20));
+    setFilteredItems(filtered.slice(0, 20));
   };
 
 
@@ -233,7 +311,7 @@ export default function Recipe() {
 
 
   return (
-    <div className='w-full bg-zinc-600 text-white flex '>
+    <div className='w-full bg-zinc-800 text-white flex '>
       <div className='h-max w-[20%] border-r-2'>
 
         <input type="text"
@@ -243,7 +321,7 @@ export default function Recipe() {
           onChange={handleSearch}
         />
 
-        <div className='mx-[1vw] my-[2vh]' >
+        <div className='mx-[1vw] my-[2vh]'>
           <button className='flex gap-[5vw] w-full' onClick={cookingDropdown}>
             <div className='flex gap-[1vw] w-[10vw]'>
               <LuAlarmClock className='text-2xl' />
@@ -251,32 +329,24 @@ export default function Recipe() {
             </div>
             <BsChevronDown className={`transform transition-transform duration-300 ${isCookingOpen ? 'rotate-180' : ''}`} />
           </button>
-          <div className={`transition-all duration-300 mt-3 ${isCookingOpen ? 'block' : 'hidden'}`}  onClick={handleCookTimeChange}>
-            <div className='flex flex-wrap gap-3 ml-[3vw]' data-filter='cook-time' >
-              <label className='bg-zinc-500 rounded-md flex items-center cursor-pointer has-[:checked]:bg-orange-400'>
-                <div className='px-2'>10 - 20 minutes</div>
-                <input type="radio" name="cook-time" value="10-20" aria-label="10 to 20 minutes" className='appearance-none h-[1px] w-[1px] m-[-1px]' />
-              </label>
-              <label className='bg-zinc-500 rounded-md flex items-center cursor-pointer has-[:checked]:bg-orange-400'>
-                <div className='px-2'>20 - 30 minutes</div>
-                <input type="radio" name="cook-time" value="20-30" aria-label="20 to 30 minutes" className='appearance-none h-[1px] w-[1px] m-[-1px]' />
-              </label>
-              <label className='bg-zinc-500 rounded-md flex items-center cursor-pointer has-[:checked]:bg-orange-400'>
-                <div className='px-2'>30 - 40 minutes</div>
-                <input type="radio" name="cook-time" value="30-40" aria-label="30 to 40 minutes" className='appearance-none h-[1px] w-[1px] m-[-1px]' />
-              </label>
-              <label className='bg-zinc-500 rounded-md flex items-center cursor-pointer has-[:checked]:bg-orange-400'>
-                <div className='px-2'>40 - 50 minutes</div>
-                <input type="radio" name="cook-time" value="40-50" aria-label="40 to 50 minutes" className='appearance-none h-[1px] w-[1px] m-[-1px]' />
-              </label>
-              <label className='bg-zinc-500 rounded-md flex items-center cursor-pointer has-[:checked]:bg-orange-400'>
-                <div className='px-2'>50 - 60 minutes</div>
-                <input type="radio" name="cook-time" value="50-60" aria-label="50 to 60 minutes" className='appearance-none h-[1px] w-[1px] m-[-1px]' />
-              </label>
-              <label className='bg-zinc-500 rounded-md flex items-center cursor-pointer has-[:checked]:bg-orange-400'>
-                <div className='px-2'>&gt; 1 hour</div>
-                <input type="radio" name="cook-time" value="60+" aria-label="1 or more hours" className='appearance-none h-[1px] w-[1px] m-[-1px]'/>
-              </label>
+          <div className={`transition-all duration-300 mt-3 ${isCookingOpen ? 'block' : 'hidden'}`}>
+            <div className='flex flex-wrap gap-3 ml-[3vw]' data-filter='cook-time'>
+              {['10-20', '20-30', '30-40', '40-50', '50-60', '60+'].map((time) => (
+                <label key={time} className='bg-zinc-500 rounded-md flex items-center cursor-pointer has-[:checked]:bg-orange-400'>
+                  <div className='px-2'>
+                    {time === '60+' ? '> 1 hour' : `${time.split('-').join(' - ')} minutes`}
+                  </div>
+                  <input
+                    type="radio"
+                    name="cook-time"
+                    value={time}
+                    checked={cookTime === time} // Check if this time matches the current state
+                    onChange={handleCookTimeChange}
+                    className='appearance-none h-[1px] w-[1px] m-[-1px]'
+                    aria-label={`${time === '60+' ? '1 or more hours' : `${time.split('-').join(' to ')} minutes`}`}
+                  />
+                </label>
+              ))}
             </div>
           </div>
         </div>
@@ -289,36 +359,24 @@ export default function Recipe() {
             </div>
             <BsChevronDown className={`transform transition-transform duration-300 ${isServingOpen ? 'rotate-180' : ''}`} />
           </button>
-          <div className={`transition-all duration-300 mt-3 ${isServingOpen ? 'block' : 'hidden'}`} onClick={handleServingChange} >
+          <div className={`transition-all duration-300 mt-3 ${isServingOpen ? 'block' : 'hidden'}`}>
             <div className='flex flex-wrap gap-3 ml-[3vw]' data-filter="calories">
-              <label className='bg-zinc-500 rounded-md flex items-center cursor-pointer has-[:checked]:bg-orange-400'>
-                <div className='px-2'> Serving 1 </div>
-                <input type="radio" name="serving" value="1" aria-label="serving 1" className='appearance-none h-[1px] w-[1px] m-[-1px]'  />
-              </label>
-              <label className='bg-zinc-500 rounded-md flex items-center cursor-pointer has-[:checked]:bg-orange-400'>
-                <div className='px-2'> Serving 2 </div>
-                <input type="radio" name="serving" value="2" aria-label="serving 2" className='appearance-none h-[1px] w-[1px] m-[-1px]'  />
-              </label>
-              <label className='bg-zinc-500 rounded-md flex items-center cursor-pointer has-[:checked]:bg-orange-400'>
-                <div className='px-2'> Serving 3 </div>
-                <input type="radio" name="serving" value="3" aria-label="serving 3" className='appearance-none h-[1px] w-[1px] m-[-1px]'  />
-              </label>
-              <label className='bg-zinc-500 rounded-md flex items-center cursor-pointer has-[:checked]:bg-orange-400'>
-                <div className='px-2'> Serving 4 </div>
-                <input type="radio" name="serving" value="4" aria-label="serving 4" className='appearance-none h-[1px] w-[1px] m-[-1px]'  />
-              </label>
-              <label className='bg-zinc-500 rounded-md flex items-center cursor-pointer has-[:checked]:bg-orange-400'>
-                <div className='px-2'> Serving 5 </div>
-                <input type="radio" name="serving" value="5" aria-label="serving 5" className='appearance-none h-[1px] w-[1px] m-[-1px]'  />
-              </label>
-              <label className='bg-zinc-500 rounded-md flex items-center cursor-pointer has-[:checked]:bg-orange-400'>
-                <div className='px-2'> Serving 6 </div>
-                <input type="radio" name="serving" value="6" aria-label="serving 6" className='appearance-none h-[1px] w-[1px] m-[-1px]'  />
-              </label>
-              <label className='bg-zinc-500 rounded-md flex items-center cursor-pointer has-[:checked]:bg-orange-400'>
-                <div className='px-2'> Serving &gt;6 </div>
-                <input type="radio" name="serving" value="6+" aria-label="serving 6 or more" className='appearance-none h-[1px] w-[1px] m-[-1px]' />
-              </label>
+              {['1', '2', '3', '4', '5', '6', '6+'].map((servings) => (
+                <label key={servings} className='bg-zinc-500 rounded-md flex items-center cursor-pointer has-[:checked]:bg-orange-400'>
+                  <div className='px-2'>
+                    {servings === '6+' ? 'Serving > 6' : `Serving ${servings}`}
+                  </div>
+                  <input
+                    type="radio"
+                    name="serving"
+                    value={servings}
+                    checked={serving === servings} // Check if this serving matches the current state
+                    onChange={handleServingChange}
+                    className='appearance-none h-[1px] w-[1px] m-[-1px]'
+                    aria-label={`serving ${serving === '6+' ? '6 or more' : serving}`}
+                  />
+                </label>
+              ))}
             </div>
           </div>
         </div>
@@ -331,48 +389,33 @@ export default function Recipe() {
             </div>
             <BsChevronDown className={`transform transition-transform duration-300 ${isDietOpen ? 'rotate-180' : ''}`} />
           </button>
-          <div className={`transition-all duration-300 mt-3 ${isDietOpen ? 'block' : 'hidden'}`} onClick={handleDietChange} >
+          <div className={`transition-all duration-300 mt-3 ${isDietOpen ? 'block' : 'hidden'}`}>
             <div className='flex flex-wrap gap-3 ml-[3vw]' data-filter="diet">
-              <label className='bg-zinc-500 rounded-md flex items-center cursor-pointer has-[:checked]:bg-orange-400' >
-                <div className='px-2'>Diabetic Friendly</div>
-                <input type="checkbox" name="Diabetic Friendly" value="diabetic-friendly" aria-label='Diabetic Friendly' className='appearance-none h-[1px] w-[1px] m-[-1px]' />
-              </label>
-              <label className='bg-zinc-500 rounded-md flex items-center cursor-pointer has-[:checked]:bg-orange-400' >
-                <div className='px-2'>Vegetarian</div>
-                <input type="checkbox" name="Vegetarian" value="vegetarian" aria-label='Vegetarian' className='appearance-none h-[1px] w-[1px] m-[-1px]' />
-              </label>
-              <label className='bg-zinc-500 rounded-md flex items-center cursor-pointer has-[:checked]:bg-orange-400' >
-                <div className='px-2'>Non Vegeterian</div>
-                <input type="checkbox" name="Non Vegeterian" value="non-vegeterian" aria-label='Non Vegeterian' className='appearance-none h-[1px] w-[1px] m-[-1px]' />
-              </label>
-              <label className='bg-zinc-500 rounded-md flex items-center cursor-pointer has-[:checked]:bg-orange-400' >
-                <div className='px-2'>High Protein Vegetarian</div>
-                <input type="checkbox" name="High Protein Vegetarian" value="high-protein-vegeterian" aria-label='High Protein Vegetarian' className='appearance-none h-[1px] w-[1px] m-[-1px]' />
-              </label>
-              <label className='bg-zinc-500 rounded-md flex items-center cursor-pointer has-[:checked]:bg-orange-400' >
-                <div className='px-2'>High Protein Non Vegetarian</div>
-                <input type="checkbox" name="High Protein Non Vegetarian" value="high-protein-non-vegeterian" aria-label='High Protein Non Vegetarian' className='appearance-none h-[1px] w-[1px] m-[-1px]' />
-              </label>
-              <label className='bg-zinc-500 rounded-md flex items-center cursor-pointer has-[:checked]:bg-orange-400' >
-                <div className='px-2'>Eggetarian</div>
-                <input type="checkbox" name="Eggetarian" value="eggtarian" aria-label='Eggetarian' className='appearance-none h-[1px] w-[1px] m-[-1px]' />
-              </label>
-              <label className='bg-zinc-500 rounded-md flex items-center cursor-pointer has-[:checked]:bg-orange-400' >
-                <div className='px-2'>No Onion No Garlic (Sattvic)</div>
-                <input type="checkbox" name="No Onion No Garlic (Sattvic)" value="no-onion-no-garlic" aria-label='No Onion No Garlic (Sattvic)' className='appearance-none h-[1px] w-[1px] m-[-1px]' />
-              </label>
-              <label className='bg-zinc-500 rounded-md flex items-center cursor-pointer has-[:checked]:bg-orange-400' >
-                <div className='px-2'>Gluten Free</div>
-                <input type="checkbox" name="Gluten Free" value="gluten-free" aria-label='Gluten Free' className='appearance-none h-[1px] w-[1px] m-[-1px]' />
-              </label>
-              <label className='bg-zinc-500 rounded-md flex items-center cursor-pointer has-[:checked]:bg-orange-400' >
-                <div className='px-2'>Vegan</div>
-                <input type="checkbox" name="Vegan" value="vegan" aria-label='Vegan' className='appearance-none h-[1px] w-[1px] m-[-1px]' />
-              </label>
-              <label className='bg-zinc-500 rounded-md flex items-center cursor-pointer has-[:checked]:bg-orange-400' >
-                <div className='px-2'>Sugar Free Diet</div>
-                <input type="checkbox" name="Sugar Free Diet" value="sugar-free-diet" aria-label='Sugar Free Diet' className='appearance-none h-[1px] w-[1px] m-[-1px]' />
-              </label>
+              {[
+                { label: 'Diabetic Friendly', value: 'diabetic friendly' },
+                { label: 'Vegetarian', value: 'vegetarian' },
+                { label: 'Non Vegetarian', value: 'non vegetarian' },
+                { label: 'High Protein Vegetarian', value: 'high protein vegetarian' },
+                { label: 'High Protein Non Vegetarian', value: 'high protein non vegetarian' },
+                { label: 'Eggetarian', value: 'eggetarian' },
+                { label: 'No Onion No Garlic (Sattvic)', value: 'no onion no garlic (sattvic)' },
+                { label: 'Gluten Free', value: 'gluten free' },
+                { label: 'Vegan', value: 'vegan' },
+                { label: 'Sugar Free Diet', value: 'sugar free diet' },
+              ].map(({ label, value }) => (
+                <label key={value} className='bg-zinc-500 rounded-md flex items-center cursor-pointer has-[:checked]:bg-orange-400'>
+                  <div className='px-2'>{label}</div>
+                  <input
+                    type="checkbox"
+                    name={label}
+                    value={value}
+                    checked={diet.includes(value)} // Check if the current value is in the diet state
+                    onChange={handleDietChange} // Handle change
+                    className='appearance-none h-[1px] w-[1px] m-[-1px]'
+                    aria-label={label}
+                  />
+                </label>
+              ))}
             </div>
           </div>
         </div>
@@ -385,36 +428,30 @@ export default function Recipe() {
             </div>
             <BsChevronDown className={`transform transition-transform duration-300 ${isCourseOpen ? 'rotate-180' : ''}`} />
           </button>
-          <div className={`transition-all duration-300 mt-3 ${isCourseOpen ? 'block' : 'hidden'}`} onClick={handleCourseChange} >
+          <div className={`transition-all duration-300 mt-3 ${isCourseOpen ? 'block' : 'hidden'}`}>
             <div className='flex flex-wrap gap-3 ml-[3vw]' data-filter="courseType">
-              <label className='bg-zinc-500 rounded-md flex items-center cursor-pointer has-[:checked]:bg-orange-400'>
-                <div className='px-2'>Breakfast</div>
-                <input type="checkbox" name="Breakfast" value="breakfast" aria-label='Breakfast' className='appearance-none h-[1px] w-[1px] m-[-1px]' />
-              </label>
-              <label className='bg-zinc-500 rounded-md flex items-center cursor-pointer has-[:checked]:bg-orange-400'>
-                <div className='px-2'>Lunch</div>
-                <input type="checkbox" name="Lunch" value="lunch" aria-label='Lunch' className='appearance-none h-[1px] w-[1px] m-[-1px]'  />
-              </label>
-              <label className='bg-zinc-500 rounded-md flex items-center cursor-pointer has-[:checked]:bg-orange-400'>
-                <div className='px-2'>Dinner</div>
-                <input type="checkbox" name="Dinner" value="dinner" aria-label='Dinner' className='appearance-none h-[1px] w-[1px] m-[-1px]'  />
-              </label>
-              <label className='bg-zinc-500 rounded-md flex items-center cursor-pointer has-[:checked]:bg-orange-400'>
-                <div className='px-2'>Snacks</div>
-                <input type="checkbox" name="Snacks" value="snacks" aria-label='Snacks' className='appearance-none h-[1px] w-[1px] m-[-1px]'  />
-              </label>
-              <label className='bg-zinc-500 rounded-md flex items-center cursor-pointer has-[:checked]:bg-orange-400'>
-                <div className='px-2'>Dessert</div>
-                <input type="checkbox" name="Dessert" value="dessert" aria-label='Dessert' className='appearance-none h-[1px] w-[1px] m-[-1px]'  />
-              </label>
-              <label className='bg-zinc-500 rounded-md flex items-center cursor-pointer has-[:checked]:bg-orange-400'>
-                <div className='px-2'>Main Course</div>
-                <input type="checkbox" name="Main Course" value="main-course" aria-label='Main Course' className='appearance-none h-[1px] w-[1px] m-[-1px]'  />
-              </label>
-              <label className='bg-zinc-500 rounded-md flex items-center cursor-pointer has-[:checked]:bg-orange-400'>
-                <div className='px-2'>Appetizer</div>
-                <input type="checkbox" name="Appetizer" value="appetizer" aria-label='Appetizer' className='appearance-none h-[1px] w-[1px] m-[-1px]'  />
-              </label>
+              {[
+                { label: 'Breakfast', value: 'indian breakfast' },
+                { label: 'Lunch', value: 'lunch' },
+                { label: 'Dinner', value: 'dinner' },
+                { label: 'Snacks', value: 'snack' },
+                { label: 'Dessert', value: 'dessert' },
+                { label: 'Main Course', value: 'main course' },
+                { label: 'Appetizer', value: 'appetizer' },
+              ].map(({ label, value }) => (
+                <label key={value} className='bg-zinc-500 rounded-md flex items-center cursor-pointer has-[:checked]:bg-orange-400'>
+                  <div className='px-2'>{label}</div>
+                  <input
+                    type="checkbox"
+                    name={label}
+                    value={value}
+                    checked={course.includes(value)} // Check if the current value is in the course state
+                    onChange={handleCourseChange} // Handle change
+                    className='appearance-none h-[1px] w-[1px] m-[-1px]'
+                    aria-label={label}
+                  />
+                </label>
+              ))}
             </div>
           </div>
         </div>
@@ -423,48 +460,36 @@ export default function Recipe() {
           <button className='flex gap-[5vw] w-full' onClick={cusineDropdown}>
             <div className='flex gap-[1vw] w-[10vw]'>
               <FaGlobe className='text-2xl' />
-              <span>Cusine</span>
+              <span>Cuisine</span>
             </div>
             <BsChevronDown className={`transform transition-transform duration-300 ${isCusineOpen ? 'rotate-180' : ''}`} />
           </button>
-          <div className={`transition-all duration-300 mt-3 ${isCusineOpen ? 'block' : 'hidden'}`} onClick={handleCuisineChange} >
+          <div className={`transition-all duration-300 mt-3 ${isCusineOpen ? 'block' : 'hidden'}`}>
             <div className='flex flex-wrap gap-3 ml-[3vw]' data-filter="cuisine">
-              <label className='bg-zinc-500 rounded-md flex items-center cursor-pointer has-[:checked]:bg-orange-400'>
-                <div className='px-2'>Indian</div>
-                <input type="checkbox" name="Indian" value="indian" aria-label='Indian' className='appearance-none h-[1px] w-[1px] m-[-1px]'  />
-              </label>
-              <label className='bg-zinc-500 rounded-md flex items-center cursor-pointer has-[:checked]:bg-orange-400'>
-                <div className='px-2'>South Indian</div>
-                <input type="checkbox" name="South Indian" value="south-indian" aria-label='South Indian' className='appearance-none h-[1px] w-[1px] m-[-1px]' />
-              </label>
-              <label className='bg-zinc-500 rounded-md flex items-center cursor-pointer has-[:checked]:bg-orange-400'>
-                <div className='px-2'>North Indian</div>
-                <input type="checkbox" name="North Indian" value="north-indian" aria-label='North Indian' className='appearance-none h-[1px] w-[1px] m-[-1px]' />
-              </label>
-              <label className='bg-zinc-500 rounded-md flex items-center cursor-pointer has-[:checked]:bg-orange-400'>
-                <div className='px-2'>Gujrati</div>
-                <input type="checkbox" name="Gujrati" value="gujrati" aria-label='Gujrati' className='appearance-none h-[1px] w-[1px] m-[-1px]' />
-              </label>
-              <label className='bg-zinc-500 rounded-md flex items-center cursor-pointer has-[:checked]:bg-orange-400'>
-                <div className='px-2'>Rajasthani</div>
-                <input type="checkbox" name="Rajasthani" value="rajasthani" aria-label='Rajasthani' className='appearance-none h-[1px] w-[1px] m-[-1px]' />
-              </label>
-              <label className='bg-zinc-500 rounded-md flex items-center cursor-pointer has-[:checked]:bg-orange-400'>
-                <div className='px-2'>Hydrabadi</div>
-                <input type="checkbox" name="Hydrabadi" value="hydrabadi" aria-label='Hydrabadi' className='appearance-none h-[1px] w-[1px] m-[-1px]' />
-              </label>
-              <label className='bg-zinc-500 rounded-md flex items-center cursor-pointer has-[:checked]:bg-orange-400'>
-                <div className='px-2'>Begnali</div>
-                <input type="checkbox" name="Begnali" value="begnali" aria-label='Begnali' className='appearance-none h-[1px] w-[1px] m-[-1px]' />
-              </label>
-              <label className='bg-zinc-500 rounded-md flex items-center cursor-pointer has-[:checked]:bg-orange-400'>
-                <div className='px-2'>Maharashtrian</div>
-                <input type="checkbox" name="Maharashtrian" value="maharashtrian" aria-label='Maharashtrian' className='appearance-none h-[1px] w-[1px] m-[-1px]'  />
-              </label>
-              <label className='bg-zinc-500 rounded-md flex items-center cursor-pointer has-[:checked]:bg-orange-400'>
-                <div className='px-2'>Punjabi</div>
-                <input type="checkbox" name="Punjabi" value="punjabi" aria-label='Punjabi' className='appearance-none h-[1px] w-[1px] m-[-1px]' />
-              </label>
+              {[
+                { label: 'Indian', value: 'indian' },
+                { label: 'South Indian', value: 'south indian recipes' },
+                { label: 'North Indian', value: 'north indian recipes' },
+                { label: 'Gujarati', value: 'gujarati recipes' },
+                { label: 'Rajasthani', value: 'rajasthani' },
+                { label: 'Hyderabadi', value: 'hyderabadi' },
+                { label: 'Bengali', value: 'bengali recipes' },
+                { label: 'Maharashtrian', value: 'maharashtrian recipes' },
+                { label: 'Punjabi', value: 'punjabi' },
+              ].map(({ label, value }) => (
+                <label key={value} className='bg-zinc-500 rounded-md flex items-center cursor-pointer has-[:checked]:bg-orange-400'>
+                  <div className='px-2'>{label}</div>
+                  <input
+                    type="checkbox"
+                    name={label}
+                    value={value}
+                    checked={cuisine.includes(value)} // Check if the current value is in the cuisine state
+                    onChange={handleCuisineChange} // Handle change
+                    className='appearance-none h-[1px] w-[1px] m-[-1px]'
+                    aria-label={label}
+                  />
+                </label>
+              ))}
             </div>
           </div>
         </div>

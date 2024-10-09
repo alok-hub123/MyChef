@@ -25,7 +25,7 @@ function Profile() {
   ]
 
   return (
-    <div className='bg-white h-[95vh] '>
+    <div className='bg-zinc-800 text-white h-[95vh] '>
       <div className="container mx-auto p-4">
         {/* Profile Section */}
         <div className="flex items-center justify-between mb-8">
@@ -42,7 +42,7 @@ function Profile() {
             </div>
             <div>
               <h1 className="text-2xl font-bold">Alok Chaudhary</h1>
-              <div className="flex space-x-4  text-gray-900">
+              <div className="flex space-x-4  text-zinc-400">
                 <span className="flex items-center space-x-1">
                   <FaUserFriends />
                   <span>Followers: 10</span>
@@ -60,9 +60,9 @@ function Profile() {
         {/* My Recipes Section */}
         <div>
           <h2 className="text-xl font-bold mb-4">My Recipes</h2>
-          <div className="h-[60vh] flex flex-wrap space-x-2 gap-y-4 gap-x-6 overflow-y-scroll">
+          <div className="h-[60vh] flex flex-wrap space-x-2 gap-y-4 gap-x-6 overflow-y-scroll ">
             {recipes.map((recipe, index) => (
-              <div key={index} className="h-[55%] w-[20%] border p-4 rounded-lg shadow hover:shadow-lg transition-shadow">
+              <div key={index} className="h-[55%] w-[20%] border p-4 rounded-lg shadow shadow-white hover:shadow-md hover:shadow-white transition-shadow bg-zinc-600">
               <img
                 src={recipe.path}
                 alt="Recipe"
@@ -70,7 +70,7 @@ function Profile() {
               />
               <div className="mt-2">
                 <h3 className="font-bold">{recipe.name}</h3>
-                <span className="flex items-center space-x-1 text-gray-600">
+                <span className="flex items-center space-x-1 text-zinc-400">
                   <FaClock />
                   <span>{recipe.duration}</span>
                 </span>
