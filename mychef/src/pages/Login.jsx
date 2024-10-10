@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { auth } from '../constants/firebaseConfig.jsx'; // Adjust the path as necessary
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
-import loginBg from '../assets/loginBg.jpg'
+import loginBg from '../assets/loginBg.webp'
 
 const LoginSignupComponent = () => {
   const navigate = useNavigate();
@@ -47,9 +47,10 @@ const LoginSignupComponent = () => {
   };
 
   // style={{ backgroundImage: `url(${loginBg})` }} 
+  // const loginBg ="https://files.oaiusercontent.com/file-GTA4GEQnzwsjUpVulclrCYH6?se=2024-10-10T14%3A07%3A25Z&sp=r&sv=2024-08-04&sr=b&rscc=max-age%3D604800%2C%20immutable%2C%20private&rscd=attachment%3B%20filename%3D540f905e-3460-4d54-bb40-366e782b1a99.webp&sig=yOBEXlh24%2Bq%2BJePHzqPHHYe4EERcx2SGE6%2BYCd45FlU%3D";
   return (
-    <div className="flex items-center justify-center min-h-screen bg-no-repeat bg-cover" style={{ backgroundImage: `url(${loginBg})` }} >
-      <div className="w-full max-w-md p-8 space-y-8 text-white rounded-lg shadow-md backdrop-blur-md">
+    <div className="flex items-center justify-center h-[92vh] bg-center" style={{ backgroundImage: `url(${loginBg})` }}>
+      <div className="w-full max-w-md p-8 space-y-8 text-white rounded-lg shadow-md backdrop-blur-lg">
         <h1 className="text-2xl font-bold text-center">{isLogin ? 'Sign In' : 'Sign Up'}</h1>
         {error && <p className="text-red-500">{error}</p>}
         {isLogin ? (
