@@ -53,7 +53,7 @@ export default function RecipeVideos() {
   };
 
   return (
-    <div className="recipe-videos-page text-white bg-no-repeat bg-cover" style={{ backgroundImage: `url(${bgImage})` }} >
+    <div className="recipe-videos-page text-white bg-no-repeat bg-cover bg-zinc-800" style={{ backgroundImage: `url(${bgImage})` }} >
 
       <div className='flex justify-between py-5 px-2'>
         <h1 className='text-2xl underline ml-5 '>Recipe Tutorial Videos</h1>
@@ -87,7 +87,7 @@ export default function RecipeVideos() {
               />
             </div>
             <div className='text-black px-3 border-t-2 mt-2 border-black font-semibold'>
-              <h3>{video.snippet.title}</h3>
+              <h3 className='truncate'>{video.snippet.title}</h3>
             </div>
           </div>
         ))}

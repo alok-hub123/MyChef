@@ -21,8 +21,8 @@ function LandingPage() {
 
   useGSAP(() => {
     gsap.to(".foodplate", {
-      y: 523,
-      x: -755,
+      y: 607,
+      x: -850,
       scale:3/4,
       duration: 2,
       ease: 'power2.inOut',

@@ -1,6 +1,6 @@
 import React from 'react'
 import { useState } from 'react';
-import { FaHome, FaUtensils, FaListAlt, FaVideo, FaHeart, FaUser, FaShoppingCart } from 'react-icons/fa';
+import {FaHeart, FaUser, FaHome } from 'react-icons/fa';
 import { Link, Outlet } from 'react-router-dom';
 import { CgProfile } from "react-icons/cg";
 
@@ -13,6 +13,7 @@ export default function Dashboard() {
   };
 
   const icons = [
+    { name: 'Home', icon: <FaHome />, id: 'home', path: '/' },
     { name: 'Profile', icon: <FaUser />, id: 'profile', path: '/dashboard' },
     { name: 'Saved Recipe', icon: <FaHeart />, id: 'favourite', path: '/dashboard/favourite' },
   ];

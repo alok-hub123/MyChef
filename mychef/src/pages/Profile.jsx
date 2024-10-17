@@ -1,27 +1,53 @@
 import React from 'react'
 import { FaEdit, FaPlus, FaUserFriends, FaClock } from "react-icons/fa";
+import { getDatabase, ref, onValue } from 'firebase/database';
+import { auth } from '../constants/firebaseConfig.jsx';
+import { onAuthStateChanged } from 'firebase/auth';
+import { useState, useEffect } from "react";
+import { useNavigate } from 'react-router-dom';
 
 function Profile() {
 
+  const [userData, setUserData] = useState(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const db = getDatabase();
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        const userRef = ref(db, 'users/' + user.uid);
+        onValue(userRef, (snapshot) => {
+          setUserData(snapshot.val());
+        });
+      }
+      if (!user) {
+        // If no user is signed in, redirect to the login page
+        navigate('/login');
+      }
+    });
+
+    return () => unsubscribe(); // Cleanup subscription on component unmount
+  }, []);
+
   const recipes = [
-    {name:"Recipe 1", path:"../src/assets/img1.jpg", duration:"10 min"},
-    {name:"Recipe 2", path:"../src/assets/img2.jpeg", duration:"10 min"},
-    {name:"Recipe 3", path:"../src/assets/img3.jpg", duration:"10 min"},
-    {name:"Recipe 4", path:"../src/assets/img4.jpg", duration:"10 min"},
-    {name:"Recipe 5", path:"../src/assets/img5.jpg", duration:"10 min"},
-    {name:"Recipe 6", path:"../src/assets/img6.jpeg", duration:"10 min"},
-    {name:"Recipe 1", path:"../src/assets/img1.jpg", duration:"10 min"},
-    {name:"Recipe 2", path:"../src/assets/img2.jpeg", duration:"10 min"},
-    {name:"Recipe 3", path:"../src/assets/img3.jpg", duration:"10 min"},
-    {name:"Recipe 4", path:"../src/assets/img4.jpg", duration:"10 min"},
-    {name:"Recipe 5", path:"../src/assets/img5.jpg", duration:"10 min"},
-    {name:"Recipe 6", path:"../src/assets/img6.jpeg", duration:"10 min"},
-    {name:"Recipe 1", path:"../src/assets/img1.jpg", duration:"10 min"},
-    {name:"Recipe 2", path:"../src/assets/img2.jpeg", duration:"10 min"},
-    {name:"Recipe 3", path:"../src/assets/img3.jpg", duration:"10 min"},
-    {name:"Recipe 4", path:"../src/assets/img4.jpg", duration:"10 min"},
-    {name:"Recipe 5", path:"../src/assets/img5.jpg", duration:"10 min"},
-    {name:"Recipe 6", path:"../src/assets/img6.jpeg", duration:"10 min"},
+    { name: "Recipe 1", path: "../src/assets/img1.jpg", duration: "10 min" },
+    { name: "Recipe 2", path: "../src/assets/img2.jpeg", duration: "10 min" },
+    { name: "Recipe 3", path: "../src/assets/img3.jpg", duration: "10 min" },
+    { name: "Recipe 4", path: "../src/assets/img4.jpg", duration: "10 min" },
+    { name: "Recipe 5", path: "../src/assets/img5.jpg", duration: "10 min" },
+    { name: "Recipe 6", path: "../src/assets/img6.jpeg", duration: "10 min" },
+    { name: "Recipe 1", path: "../src/assets/img1.jpg", duration: "10 min" },
+    { name: "Recipe 2", path: "../src/assets/img2.jpeg", duration: "10 min" },
+    { name: "Recipe 3", path: "../src/assets/img3.jpg", duration: "10 min" },
+    { name: "Recipe 4", path: "../src/assets/img4.jpg", duration: "10 min" },
+    { name: "Recipe 5", path: "../src/assets/img5.jpg", duration: "10 min" },
+    { name: "Recipe 6", path: "../src/assets/img6.jpeg", duration: "10 min" },
+    { name: "Recipe 1", path: "../src/assets/img1.jpg", duration: "10 min" },
+    { name: "Recipe 2", path: "../src/assets/img2.jpeg", duration: "10 min" },
+    { name: "Recipe 3", path: "../src/assets/img3.jpg", duration: "10 min" },
+    { name: "Recipe 4", path: "../src/assets/img4.jpg", duration: "10 min" },
+    { name: "Recipe 5", path: "../src/assets/img5.jpg", duration: "10 min" },
+    { name: "Recipe 6", path: "../src/assets/img6.jpeg", duration: "10 min" },
   ]
 
   return (
@@ -41,7 +67,11 @@ function Profile() {
               </button>
             </div>
             <div>
-              <h1 className="text-2xl font-bold">Alok Chaudhary</h1>
+              {userData ? (
+                <h1 className='text-2xl font-bold'>{userData.firstName} {userData.lastName}</h1>
+              ) : (
+                <h1>Loading...</h1>
+              )}
               <div className="flex space-x-4  text-zinc-400">
                 <span className="flex items-center space-x-1">
                   <FaUserFriends />
@@ -63,19 +93,19 @@ function Profile() {
           <div className="h-[60vh] flex flex-wrap space-x-2 gap-y-4 gap-x-6 overflow-y-scroll ">
             {recipes.map((recipe, index) => (
               <div key={index} className="h-[55%] w-[20%] border p-4 rounded-lg shadow shadow-white hover:shadow-md hover:shadow-white transition-shadow bg-zinc-600">
-              <img
-                src={recipe.path}
-                alt="Recipe"
-                className="w-full h-[70%] object-cover rounded"
-              />
-              <div className="mt-2">
-                <h3 className="font-bold">{recipe.name}</h3>
-                <span className="flex items-center space-x-1 text-zinc-400">
-                  <FaClock />
-                  <span>{recipe.duration}</span>
-                </span>
+                <img
+                  src={recipe.path}
+                  alt="Recipe"
+                  className="w-full h-[70%] object-cover rounded"
+                />
+                <div className="mt-2">
+                  <h3 className="font-bold">{recipe.name}</h3>
+                  <span className="flex items-center space-x-1 text-zinc-400">
+                    <FaClock />
+                    <span>{recipe.duration}</span>
+                  </span>
+                </div>
               </div>
-            </div>
             ))}
           </div>
         </div>

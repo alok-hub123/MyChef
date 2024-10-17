@@ -41,13 +41,13 @@ function SearchBox() {
 
   useGSAP(() => {
     gsap.from(".carrot_anim", {
-      x:500,
+      x:530,
       duration: 1,
       ease: 'power2.inOut',
       scrollTrigger: {
         trigger: ".carrot_anim",
-        start: "top 90%",
-        end: "bottom 60%",
+        start: "top 80%",
+        end: "bottom 50%",
         scrub: true
       }
     })

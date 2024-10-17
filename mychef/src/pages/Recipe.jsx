@@ -7,6 +7,7 @@ import { GiMeal } from 'react-icons/gi';
 import { FaGlobe } from 'react-icons/fa';
 import IndianFoodDataset from '../constants/IndianFoodDataset.json';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { FaHeart } from "react-icons/fa";
 
 // const fetchData = async () => {
 //   const query = 'indian';
@@ -239,7 +240,7 @@ export default function Recipe() {
 
   //search logic for current(recipe page) search box
   const [query, setQuery] = useState(searchQueryHome || '');
-  
+
   useEffect(() => {
     if (searchQueryHome) {
       const filtered = IndianFoodDataset.filter((item) => {
@@ -309,6 +310,9 @@ export default function Recipe() {
     setIsCusineOpen(!isCusineOpen);
   };
 
+
+  //Favourite logic 
+  const [favourite, setFavourite] = useState(false);
 
   return (
     <div className='w-full bg-zinc-800 text-white flex '>
@@ -510,6 +514,10 @@ export default function Recipe() {
                   <img src="../Images/bread1.png" alt="dish" className='w-full h-full  ' />
                   <div className='absolute top-0 left-0 w-full h-full flex flex-col justify-center items-center gap-2'>
                     <img src={item.imageUrl} alt="" className='h-[40%] w-[55%] rounded-xl' />
+                    {/* <FaHeart
+                      className={`absolute top-[6vh] right-[4vw] text-xl ${favourite ? 'text-red-500' : 'text-white'}`}
+                      onClick={() => setFavourite(!favourite)}
+                    /> */}
                     <h1 className='text-lg font-bold w-[15vw] h-max text-center truncate '>{item.TranslatedRecipeName}</h1>  {/*truncate is used to hide the content that excceds the given width and put ...*/}
                     <div className='flex flex-wrap gap-2'>
                       <GiMeal className='text-xl' />

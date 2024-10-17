@@ -12,7 +12,6 @@ import Favourite from './pages/Favourite';
 import Profile from './pages/Profile';
 import RecipeDetail from "./pages/RecipeDetail";
 
-
 function App() {
    const router = createBrowserRouter([
       {

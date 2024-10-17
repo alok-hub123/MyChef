@@ -4,6 +4,7 @@ import { auth } from '../constants/firebaseConfig.jsx'; // Adjust the path as ne
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import loginBg from '../assets/loginBg.webp'
+import { getDatabase, ref, set } from "firebase/database"; 
 
 const LoginSignupComponent = () => {
   const navigate = useNavigate();
@@ -37,7 +38,18 @@ const LoginSignupComponent = () => {
     }
 
     try {
-      await createUserWithEmailAndPassword(auth, email, password);
+      
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+
+      // Store user data in Firebase Realtime Database
+      const db = getDatabase();
+      set(ref(db, 'users/' + user.uid), {
+        firstName: firstName,
+        lastName: lastName,
+        email: email
+      });
+
       // Switch to login after successful signup
       setIsLogin(true);
     } catch (error) {
@@ -46,8 +58,7 @@ const LoginSignupComponent = () => {
     }
   };
 
-  // style={{ backgroundImage: `url(${loginBg})` }} 
-  // const loginBg ="https://files.oaiusercontent.com/file-GTA4GEQnzwsjUpVulclrCYH6?se=2024-10-10T14%3A07%3A25Z&sp=r&sv=2024-08-04&sr=b&rscc=max-age%3D604800%2C%20immutable%2C%20private&rscd=attachment%3B%20filename%3D540f905e-3460-4d54-bb40-366e782b1a99.webp&sig=yOBEXlh24%2Bq%2BJePHzqPHHYe4EERcx2SGE6%2BYCd45FlU%3D";
+  
   return (
     <div className="flex items-center justify-center h-[92vh] bg-center" style={{ backgroundImage: `url(${loginBg})` }}>
       <div className="w-full max-w-md p-8 space-y-8 text-white rounded-lg shadow-md backdrop-blur-lg">
@@ -60,7 +71,7 @@ const LoginSignupComponent = () => {
               placeholder="Email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-orange-500"
+              className="text-orange-400 w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-orange-500"
               required
             />
             <input
@@ -68,7 +79,7 @@ const LoginSignupComponent = () => {
               placeholder="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-orange-500"
+              className="text-orange-400 w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-orange-500"
               required
             />
             <button type="submit" className="w-full px-4 py-2 font-semibold text-white bg-orange-500 rounded hover:bg-orange-600 focus:outline-none">
@@ -88,7 +99,7 @@ const LoginSignupComponent = () => {
               placeholder="First Name"
               value={firstName}
               onChange={(e) => setFirstName(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-orange-500"
+              className="w-full px-4 py-2 border text-orange-400 border-gray-300 rounded focus:outline-none focus:ring focus:ring-orange-500"
               required
             />
             <input
@@ -96,7 +107,7 @@ const LoginSignupComponent = () => {
               placeholder="Last Name"
               value={lastName}
               onChange={(e) => setLastName(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-orange-500"
+              className="w-full px-4 py-2 border text-orange-400 border-gray-300 rounded focus:outline-none focus:ring focus:ring-orange-500"
               required
             />
             <input
@@ -104,7 +115,7 @@ const LoginSignupComponent = () => {
               placeholder="Email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-orange-500"
+              className="w-full px-4 py-2 border border-gray-300 text-orange-400 rounded focus:outline-none focus:ring focus:ring-orange-500"
               required
             />
             <input
@@ -112,7 +123,7 @@ const LoginSignupComponent = () => {
               placeholder="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-orange-500"
+              className="w-full px-4 py-2 border border-gray-300 text-orange-400 rounded focus:outline-none focus:ring focus:ring-orange-500"
               required
             />
             <input
@@ -120,7 +131,7 @@ const LoginSignupComponent = () => {
               placeholder="Confirm Password"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-orange-500"
+              className="w-full px-4 py-2 border border-gray-300 text-orange-400 rounded focus:outline-none focus:ring focus:ring-orange-500"
               required
             />
             <button type="submit" className="w-full px-4 py-2 font-semibold text-white bg-orange-500 rounded hover:bg-orange-600 focus:outline-none">
