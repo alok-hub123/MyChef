@@ -149,7 +149,7 @@ const TodaySpecial = () => {
               <img
                 src="/Images/woodenPlate.png"
                 alt=""
-                className="woodenPlate h-[45vh] bg-contain bg-center group-hover:opacity-50 transition duration-300"
+                className="woodenPlate h-[45vh] bg-cover group-hover:opacity-50 transition duration-300"
               />
               <div
                 className="h-[65%] w-[55%] absolute top-[55%] left-[44%] -translate-x-1/2 -translate-y-1/2 bg-cover bg-center bg-no-repeat flex items-center justify-center rounded-full"

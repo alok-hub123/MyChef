@@ -28,7 +28,7 @@ const RecipeDetail = () => {
       <Navbar />
       {
         !recipeInfo ? <h1>Loading...</h1> :
-          <div className='text-black h-max w-full p-10 bg-gradient-to-br from-white to-orange-400'>
+          <div className='text-white h-max w-full p-10 bg-zinc-800'>
             <div className='flex gap-[5vw]'>
               <div><img src={recipeInfo.imageUrl} alt="" className='h-[60vh] w-[36vw] rounded-xl shadow' /></div>
               <div>
